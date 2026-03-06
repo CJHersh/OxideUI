@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oxide-ui.dev/schemas/tokens-v1.json",
+  "title": "OxideUI Design Tokens",
+  "description": "Schema for OxideUI design token files",
+  "type": "object",
+  "required": ["version", "themes"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Token format version"
+    },
+    "themes": {
+      "type": "object",
+      "description": "Theme definitions keyed by theme ID",
+      "additionalProperties": {
+        "$ref": "#/definitions/theme"
+      }
+    }
+  },
+  "definitions": {
+    "colorToken": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$",
+      "description": "Hex color (#RRGGBB or #RRGGBBAA)"
+    },
+    "spacingToken": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Spacing value in logical pixels"
+    },
+    "radiusToken": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Border radius in pixels"
+    },
+    "sizeToken": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Font size or dimension"
+    },
+    "stringToken": {
+      "type": "string",
+      "description": "String value (e.g. font family)"
+    },
+    "durationToken": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Duration in seconds"
+    },
+    "opacityToken": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Opacity value between 0 and 1"
+    },
+    "colors": {
+      "type": "object",
+      "required": [
+        "surface_primary",
+        "surface_secondary",
+        "text_primary",
+        "text_secondary",
+        "interactive_default",
+        "border_default",
+        "feedback_success",
+        "feedback_error"
+      ],
+      "additionalProperties": { "$ref": "#/definitions/colorToken" },
+      "properties": {
+        "surface_primary": { "$ref": "#/definitions/colorToken" },
+        "surface_secondary": { "$ref": "#/definitions/colorToken" },
+        "surface_tertiary": { "$ref": "#/definitions/colorToken" },
+        "surface_inverse": { "$ref": "#/definitions/colorToken" },
+        "text_primary": { "$ref": "#/definitions/colorToken" },
+        "text_secondary": { "$ref": "#/definitions/colorToken" },
+        "text_tertiary": { "$ref": "#/definitions/colorToken" },
+        "text_disabled": { "$ref": "#/definitions/colorToken" },
+        "text_inverse": { "$ref": "#/definitions/colorToken" },
+        "text_link": { "$ref": "#/definitions/colorToken" },
+        "interactive_default": { "$ref": "#/definitions/colorToken" },
+        "interactive_hover": { "$ref": "#/definitions/colorToken" },
+        "interactive_pressed": { "$ref": "#/definitions/colorToken" },
+        "interactive_disabled": { "$ref": "#/definitions/colorToken" },
+        "border_default": { "$ref": "#/definitions/colorToken" },
+        "border_hover": { "$ref": "#/definitions/colorToken" },
+        "border_focus": { "$ref": "#/definitions/colorToken" },
+        "border_error": { "$ref": "#/definitions/colorToken" },
+        "feedback_success": { "$ref": "#/definitions/colorToken" },
+        "feedback_warning": { "$ref": "#/definitions/colorToken" },
+        "feedback_error": { "$ref": "#/definitions/colorToken" },
+        "feedback_info": { "$ref": "#/definitions/colorToken" }
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "properties": {
+        "none": { "$ref": "#/definitions/spacingToken" },
+        "xs": { "$ref": "#/definitions/spacingToken" },
+        "sm": { "$ref": "#/definitions/spacingToken" },
+        "md": { "$ref": "#/definitions/spacingToken" },
+        "lg": { "$ref": "#/definitions/spacingToken" },
+        "xl": { "$ref": "#/definitions/spacingToken" },
+        "xxl": { "$ref": "#/definitions/spacingToken" }
+      }
+    },
+    "radius": {
+      "type": "object",
+      "properties": {
+        "none": { "$ref": "#/definitions/radiusToken" },
+        "sm": { "$ref": "#/definitions/radiusToken" },
+        "md": { "$ref": "#/definitions/radiusToken" },
+        "lg": { "$ref": "#/definitions/radiusToken" },
+        "xl": { "$ref": "#/definitions/radiusToken" },
+        "full": { "$ref": "#/definitions/radiusToken" }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "font_family": { "$ref": "#/definitions/stringToken" },
+        "font_size_xs": { "$ref": "#/definitions/sizeToken" },
+        "font_size_sm": { "$ref": "#/definitions/sizeToken" },
+        "font_size_md": { "$ref": "#/definitions/sizeToken" },
+        "font_size_lg": { "$ref": "#/definitions/sizeToken" },
+        "font_size_xl": { "$ref": "#/definitions/sizeToken" },
+        "font_size_xxl": { "$ref": "#/definitions/sizeToken" },
+        "line_height_tight": { "type": "number" },
+        "line_height_normal": { "type": "number" },
+        "line_height_relaxed": { "type": "number" },
+        "font_weight_normal": { "type": "number" },
+        "font_weight_medium": { "type": "number" },
+        "font_weight_bold": { "type": "number" }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "description": "Animation duration and easing tokens",
+      "properties": {
+        "duration_fast": { "$ref": "#/definitions/durationToken" },
+        "duration_normal": { "$ref": "#/definitions/durationToken" },
+        "duration_slow": { "$ref": "#/definitions/durationToken" },
+        "ease": { "type": "number", "minimum": 0, "description": "Easing factor" }
+      }
+    },
+    "opacity": {
+      "type": "object",
+      "description": "Opacity tokens for interactive overlays and disabled states",
+      "properties": {
+        "disabled": { "$ref": "#/definitions/opacityToken" },
+        "hover_overlay": { "$ref": "#/definitions/opacityToken" },
+        "pressed_overlay": { "$ref": "#/definitions/opacityToken" },
+        "backdrop": { "$ref": "#/definitions/opacityToken" }
+      }
+    },
+    "focus_ring": {
+      "type": "object",
+      "description": "Focus ring visual tokens for keyboard navigation",
+      "properties": {
+        "color": { "$ref": "#/definitions/colorToken" },
+        "width": { "type": "number", "minimum": 0 },
+        "offset": { "type": "number", "minimum": 0 }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "required": ["name", "colors"],
+      "properties": {
+        "name": { "type": "string" },
+        "mode": { "type": "string", "enum": ["light", "dark"], "default": "light" },
+        "colors": { "$ref": "#/definitions/colors" },
+        "spacing": { "$ref": "#/definitions/spacing" },
+        "radius": { "$ref": "#/definitions/radius" },
+        "typography": { "$ref": "#/definitions/typography" },
+        "motion": { "$ref": "#/definitions/motion" },
+        "opacity": { "$ref": "#/definitions/opacity" },
+        "focus_ring": { "$ref": "#/definitions/focus_ring" }
+      }
+    }
+  }
+}

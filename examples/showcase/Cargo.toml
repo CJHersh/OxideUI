@@ -1,0 +1,11 @@
+[package]
+name = "oxide-showcase"
+description = "Interactive component showcase for OxideUI"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+oxide-widgets.workspace = true
+oxide-core.workspace = true
+makepad-widgets.workspace = true

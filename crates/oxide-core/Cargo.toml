@@ -1,0 +1,9 @@
+[package]
+name = "oxide-core"
+description = "Core theme engine and primitives for OxideUI"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+makepad-widgets.workspace = true

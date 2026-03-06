@@ -1,0 +1,10 @@
+/Users/cjh/Documents/GitHub/OxideUI/target/debug/deps/unicode_segmentation-ccef9e275ab833df.d: /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/lib.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/grapheme.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/word.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/tables.rs
+
+/Users/cjh/Documents/GitHub/OxideUI/target/debug/deps/libunicode_segmentation-ccef9e275ab833df.rlib: /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/lib.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/grapheme.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/word.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/tables.rs
+
+/Users/cjh/Documents/GitHub/OxideUI/target/debug/deps/libunicode_segmentation-ccef9e275ab833df.rmeta: /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/lib.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/grapheme.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/word.rs /Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/tables.rs
+
+/Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/lib.rs:
+/Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/grapheme.rs:
+/Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/word.rs:
+/Users/cjh/.cargo/git/checkouts/makepad-ec2f134f34cd9f98/8b51533/libs/unicode/unicode-segmentation/src/tables.rs:

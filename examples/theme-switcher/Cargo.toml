@@ -1,0 +1,11 @@
+[package]
+name = "oxide-theme-switcher"
+description = "Theme switching demo for OxideUI"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+oxide-widgets.workspace = true
+oxide-core.workspace = true
+makepad-widgets.workspace = true
