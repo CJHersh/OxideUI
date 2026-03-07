@@ -34,8 +34,9 @@ jobs:
           sudo apt-get install -y \
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev \
             libgl1-mesa-dev libglu1-mesa-dev \
-            libasound2-dev \
-            libwayland-dev libxkbcommon-dev
+            libasound2-dev libpulse-dev \
+            libwayland-dev libxkbcommon-dev \
+            libssl-dev
       - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --workspace -- -D warnings
 
@@ -55,8 +56,9 @@ jobs:
           sudo apt-get install -y \
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev \
             libgl1-mesa-dev libglu1-mesa-dev \
-            libasound2-dev \
-            libwayland-dev libxkbcommon-dev
+            libasound2-dev libpulse-dev \
+            libwayland-dev libxkbcommon-dev \
+            libssl-dev
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --workspace
 
@@ -72,8 +74,9 @@ jobs:
           sudo apt-get install -y \
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev \
             libgl1-mesa-dev libglu1-mesa-dev \
-            libasound2-dev \
-            libwayland-dev libxkbcommon-dev
+            libasound2-dev libpulse-dev \
+            libwayland-dev libxkbcommon-dev \
+            libssl-dev
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --workspace
 
@@ -89,8 +92,9 @@ jobs:
           sudo apt-get install -y \
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev \
             libgl1-mesa-dev libglu1-mesa-dev \
-            libasound2-dev \
-            libwayland-dev libxkbcommon-dev
+            libasound2-dev libpulse-dev \
+            libwayland-dev libxkbcommon-dev \
+            libssl-dev
       - uses: Swatinem/rust-cache@v2
       - run: cargo doc --workspace --no-deps
         env:
