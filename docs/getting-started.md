@@ -4,16 +4,27 @@ OxideUI is the industry's first Multi-Skin Rust component library. Build once, t
 
 ## Prerequisites
 
-- **Rust 1.70+** — [rustup](https://rustup.rs/)
+- **Rust 1.70+** — install via [rustup](https://rustup.rs/)
 - **Makepad** — OxideUI is built on [Makepad](https://github.com/makepad/makepad) (dev branch)
+- **Platform deps (Linux)** — `sudo apt install libx11-dev libxcursor-dev libgl-dev libasound2-dev` (or your distro's equivalents). macOS and Windows need no extra system packages.
+
+## Try it now
+
+The fastest way to see OxideUI in action is to clone the repo and run the showcase:
+
+```bash
+git clone https://github.com/CJHersh/OxideUI.git
+cd OxideUI
+cargo run -p oxide-showcase
+```
 
 ## Installation
 
 ### Option 1: CLI (recommended)
 
 ```bash
-git clone https://github.com/oxide-ui/oxide-ui.git
-cd oxide-ui
+git clone https://github.com/CJHersh/OxideUI.git
+cd OxideUI
 cargo install --path crates/oxide-cli
 oxide new my-app
 cd my-app
@@ -31,9 +42,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-oxide-widgets = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-oxide-core = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-makepad-widgets = { git = "https://github.com/makepad/makepad", branch = "dev" }
+oxide-widgets = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
 ```
 
 ## First App

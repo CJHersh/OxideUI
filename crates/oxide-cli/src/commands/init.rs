@@ -76,9 +76,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-oxide-widgets = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-oxide-core = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-makepad-widgets = { git = "https://github.com/makepad/makepad", branch = "dev" }
+oxide-widgets = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
 "#;
         fs::write(cargo_path, cargo)?;
     }

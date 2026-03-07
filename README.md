@@ -2,7 +2,7 @@
 
 **The industry's first Multi-Skin Rust component library**
 
-[![CI](https://github.com/oxide-ui/oxide-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/oxide-ui/oxide-ui/actions/workflows/ci.yml)
+[![CI](https://github.com/CJHersh/OxideUI/actions/workflows/ci.yml/badge.svg)](https://github.com/CJHersh/OxideUI/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue.svg)
 [![Rust](https://img.shields.io/badge/rust-stable-orange.svg)](https://www.rust-lang.org/)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20Web%20%7C%20Android%20%7C%20iOS-lightgrey.svg)](https://github.com/makepad/makepad)
@@ -18,9 +18,9 @@ OxideUI bridges the gap between high-level design systems and low-level performa
 ```toml
 # Cargo.toml
 [dependencies]
-oxide-widgets = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-oxide-core = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-makepad-widgets = { git = "https://github.com/makepad/makepad", branch = "dev" }
+oxide-widgets = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
 ```
 
 ---
@@ -40,31 +40,46 @@ makepad-widgets = { git = "https://github.com/makepad/makepad", branch = "dev" }
 
 ## Quick Start
 
-### Option 1: CLI (recommended)
+### Prerequisites
+
+- **Rust 1.70+** — install via [rustup](https://rustup.rs/)
+- **Platform deps** — on Linux you may need: `sudo apt install libx11-dev libxcursor-dev libgl-dev libasound2-dev` (or your distro's equivalents)
+
+### Try it now
+
+The fastest way to see OxideUI in action is to run the built-in showcase:
 
 ```bash
-git clone https://github.com/oxide-ui/oxide-ui.git
-cd oxide-ui
+git clone https://github.com/CJHersh/OxideUI.git
+cd OxideUI
+cargo run -p oxide-showcase
+```
+
+### Option 1: Scaffold a new project with the CLI
+
+```bash
+git clone https://github.com/CJHersh/OxideUI.git
+cd OxideUI
 cargo install --path crates/oxide-cli
 oxide new my-app
 cd my-app
 cargo run
 ```
 
-### Option 2: Add to existing project
+### Option 2: Add to an existing project
 
 Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-oxide-widgets = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-oxide-core = { git = "https://github.com/oxide-ui/oxide-ui", branch = "main" }
-makepad-widgets = { git = "https://github.com/makepad/makepad", branch = "dev" }
+oxide-widgets = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
+makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
 ```
 
 ### Basic example
 
-OxideUI uses Makepad's `script_mod!` DSL for widget definitions and `ThemeEngine` for runtime theme switching:
+OxideUI uses Makepad's [`script_mod!`](https://github.com/makepad/makepad) DSL (part of the Splash scripting layer) for widget definitions, and `ThemeEngine` for runtime theme switching. This replaces the older `live_design!` macro with a more expressive scripting syntax:
 
 ```rust
 use makepad_widgets::*;
@@ -235,7 +250,7 @@ cargo run -p oxide-custom-theme
 ## Project Structure
 
 ```
-oxide-ui/
+OxideUI/
 ├── crates/
 │   ├── oxide-core/         # Theme tokens, ThemeEngine, semantic colors
 │   ├── oxide-widgets/      # UI components + per-widget apply_theme functions
