@@ -698,11 +698,7 @@ impl App {
         let theme = ThemeEngine::current();
 
         let content_bg = self.ui.view(cx, ids!(content_bg));
-        content_bg.set_uniform(
-            cx,
-            live_id!(color),
-            &v4(theme.colors.surface_secondary),
-        );
+        content_bg.set_uniform(cx, live_id!(color), &v4(theme.colors.surface_secondary));
         content_bg.redraw(cx);
 
         let map = ThemeMap::builder(&self.ui)
@@ -854,31 +850,37 @@ impl App {
         let toggle_container;
 
         if is_dark {
-            sidebar_bg      = vec4(0.094, 0.094, 0.106, 1.0); // #18181B
-            primary_text    = vec4(0.980, 0.980, 0.980, 1.0); // #FAFAFA
-            section_text    = vec4(0.322, 0.322, 0.357, 1.0); // #52525B
-            secondary_text  = vec4(0.443, 0.443, 0.478, 1.0); // #71717A
-            divider_col     = vec4(0.153, 0.153, 0.165, 1.0); // #27272A
+            sidebar_bg = vec4(0.094, 0.094, 0.106, 1.0); // #18181B
+            primary_text = vec4(0.980, 0.980, 0.980, 1.0); // #FAFAFA
+            section_text = vec4(0.322, 0.322, 0.357, 1.0); // #52525B
+            secondary_text = vec4(0.443, 0.443, 0.478, 1.0); // #71717A
+            divider_col = vec4(0.153, 0.153, 0.165, 1.0); // #27272A
             inactive_btn_bg = vec4(0.094, 0.094, 0.106, 1.0); // #18181B
-            toggle_container= vec4(0.153, 0.153, 0.165, 1.0); // #27272A
+            toggle_container = vec4(0.153, 0.153, 0.165, 1.0); // #27272A
         } else {
-            sidebar_bg      = vec4(0.976, 0.980, 0.984, 1.0); // #F9FAFB
-            primary_text    = vec4(0.067, 0.094, 0.153, 1.0); // #111827
-            section_text    = vec4(0.612, 0.639, 0.686, 1.0); // #9CA3AF
-            secondary_text  = vec4(0.420, 0.447, 0.502, 1.0); // #6B7280
-            divider_col     = vec4(0.898, 0.906, 0.922, 1.0); // #E5E7EB
+            sidebar_bg = vec4(0.976, 0.980, 0.984, 1.0); // #F9FAFB
+            primary_text = vec4(0.067, 0.094, 0.153, 1.0); // #111827
+            section_text = vec4(0.612, 0.639, 0.686, 1.0); // #9CA3AF
+            secondary_text = vec4(0.420, 0.447, 0.502, 1.0); // #6B7280
+            divider_col = vec4(0.898, 0.906, 0.922, 1.0); // #E5E7EB
             inactive_btn_bg = vec4(0.976, 0.980, 0.984, 1.0); // #F9FAFB
-            toggle_container= vec4(0.953, 0.957, 0.965, 1.0); // #F3F4F6
+            toggle_container = vec4(0.953, 0.957, 0.965, 1.0); // #F3F4F6
         }
 
         let active_btn_bg = vec4(0.953, 0.957, 0.965, 1.0); // #F3F4F6 in both modes
-        let toggle_active = vec4(1.0, 1.0, 1.0, 1.0);       // #FFFFFF pill
+        let toggle_active = vec4(1.0, 1.0, 1.0, 1.0); // #FFFFFF pill
 
         // -- sidebar background --
-        self.ui.view(cx, ids!(sidebar)).set_uniform(cx, live_id!(color), &v4(sidebar_bg));
+        self.ui
+            .view(cx, ids!(sidebar))
+            .set_uniform(cx, live_id!(color), &v4(sidebar_bg));
 
         // -- dividers and border --
-        for id in [live_id!(divider_1), live_id!(divider_2), live_id!(footer_divider)] {
+        for id in [
+            live_id!(divider_1),
+            live_id!(divider_2),
+            live_id!(footer_divider),
+        ] {
             let w = self.ui.widget(cx, &[id]);
             set_widget_draw_uniform(cx, w.area(), live_id!(color), &v4(divider_col));
             w.redraw(cx);
@@ -911,7 +913,11 @@ impl App {
             ("Notion", live_id!(btn_notion)),
         ];
         for (name, id) in theme_btns {
-            let bg = if name == active_theme_base { active_btn_bg } else { inactive_btn_bg };
+            let bg = if name == active_theme_base {
+                active_btn_bg
+            } else {
+                inactive_btn_bg
+            };
             let w = self.ui.widget(cx, &[id]);
             set_widget_draw_uniform(cx, w.area(), live_id!(color), &v4(bg));
             w.redraw(cx);
@@ -937,12 +943,18 @@ impl App {
 
         // -- nav buttons (bg only) --
         let nav_on = [
-            live_id!(nav_on_buttons), live_id!(nav_on_inputs), live_id!(nav_on_display),
-            live_id!(nav_on_feedback), live_id!(nav_on_layout),
+            live_id!(nav_on_buttons),
+            live_id!(nav_on_inputs),
+            live_id!(nav_on_display),
+            live_id!(nav_on_feedback),
+            live_id!(nav_on_layout),
         ];
         let nav_off = [
-            live_id!(nav_off_buttons), live_id!(nav_off_inputs), live_id!(nav_off_display),
-            live_id!(nav_off_feedback), live_id!(nav_off_layout),
+            live_id!(nav_off_buttons),
+            live_id!(nav_off_inputs),
+            live_id!(nav_off_display),
+            live_id!(nav_off_feedback),
+            live_id!(nav_off_layout),
         ];
         for id in nav_on {
             let w = self.ui.widget(cx, &[id]);
