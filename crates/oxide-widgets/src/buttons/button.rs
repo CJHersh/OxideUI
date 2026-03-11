@@ -257,20 +257,60 @@ script_mod! {
 
 pub fn apply_button_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     let area = widget.area();
-    set_widget_draw_uniform(cx, area, live_id!(color), &v4(theme.colors.interactive_default));
-    set_widget_draw_uniform(cx, area, live_id!(color_hover), &v4(theme.colors.interactive_hover));
-    set_widget_draw_uniform(cx, area, live_id!(color_down), &v4(theme.colors.interactive_pressed));
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color),
+        &v4(theme.colors.interactive_default),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_hover),
+        &v4(theme.colors.interactive_hover),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_down),
+        &v4(theme.colors.interactive_pressed),
+    );
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
     widget.redraw(cx);
 }
 
 pub fn apply_button_secondary_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     let area = widget.area();
-    set_widget_draw_uniform(cx, area, live_id!(color), &v4(theme.colors.surface_secondary));
-    set_widget_draw_uniform(cx, area, live_id!(color_hover), &v4(theme.colors.surface_primary));
-    set_widget_draw_uniform(cx, area, live_id!(color_down), &v4(theme.colors.surface_tertiary));
-    set_widget_draw_uniform(cx, area, live_id!(border_color), &v4(theme.colors.border_default));
-    set_widget_draw_uniform(cx, area, live_id!(border_color_hover), &v4(theme.colors.border_hover));
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color),
+        &v4(theme.colors.surface_secondary),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_hover),
+        &v4(theme.colors.surface_primary),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_down),
+        &v4(theme.colors.surface_tertiary),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color),
+        &v4(theme.colors.border_default),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color_hover),
+        &v4(theme.colors.border_hover),
+    );
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
     widget.redraw(cx);
 }
@@ -290,8 +330,18 @@ pub fn apply_button_danger_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme)
     let c = theme.colors.feedback_error;
     let area = widget.area();
     set_widget_draw_uniform(cx, area, live_id!(color), &v4(c));
-    set_widget_draw_uniform(cx, area, live_id!(color_hover), &[c.x * 0.85, c.y * 0.85, c.z * 0.85, c.w]);
-    set_widget_draw_uniform(cx, area, live_id!(color_down), &[c.x * 0.7, c.y * 0.7, c.z * 0.7, c.w]);
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_hover),
+        &[c.x * 0.85, c.y * 0.85, c.z * 0.85, c.w],
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_down),
+        &[c.x * 0.7, c.y * 0.7, c.z * 0.7, c.w],
+    );
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
     widget.redraw(cx);
 }
@@ -303,8 +353,18 @@ pub fn apply_button_outline_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme
     set_widget_draw_uniform(cx, area, live_id!(color), &[0.0, 0.0, 0.0, 0.0]);
     set_widget_draw_uniform(cx, area, live_id!(color_hover), &[0.0, 0.0, 0.0, hover_a]);
     set_widget_draw_uniform(cx, area, live_id!(color_down), &[0.0, 0.0, 0.0, press_a]);
-    set_widget_draw_uniform(cx, area, live_id!(border_color), &v4(theme.colors.border_default));
-    set_widget_draw_uniform(cx, area, live_id!(border_color_hover), &v4(theme.colors.border_hover));
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color),
+        &v4(theme.colors.border_default),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color_hover),
+        &v4(theme.colors.border_hover),
+    );
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
     widget.redraw(cx);
 }

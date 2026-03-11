@@ -390,11 +390,31 @@ impl App {
         for s in ["buttons", "inputs", "display", "feedback", "layout"] {
             let is_active = s == section;
             let (on, off, sec) = match s {
-                "buttons" => (ids!(nav_on_buttons), ids!(nav_off_buttons), ids!(section_buttons)),
-                "inputs" => (ids!(nav_on_inputs), ids!(nav_off_inputs), ids!(section_inputs)),
-                "display" => (ids!(nav_on_display), ids!(nav_off_display), ids!(section_display)),
-                "feedback" => (ids!(nav_on_feedback), ids!(nav_off_feedback), ids!(section_feedback)),
-                "layout" => (ids!(nav_on_layout), ids!(nav_off_layout), ids!(section_layout)),
+                "buttons" => (
+                    ids!(nav_on_buttons),
+                    ids!(nav_off_buttons),
+                    ids!(section_buttons),
+                ),
+                "inputs" => (
+                    ids!(nav_on_inputs),
+                    ids!(nav_off_inputs),
+                    ids!(section_inputs),
+                ),
+                "display" => (
+                    ids!(nav_on_display),
+                    ids!(nav_off_display),
+                    ids!(section_display),
+                ),
+                "feedback" => (
+                    ids!(nav_on_feedback),
+                    ids!(nav_off_feedback),
+                    ids!(section_feedback),
+                ),
+                "layout" => (
+                    ids!(nav_on_layout),
+                    ids!(nav_off_layout),
+                    ids!(section_layout),
+                ),
                 _ => continue,
             };
             self.ui.button(cx, on).set_visible(cx, is_active);

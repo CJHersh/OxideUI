@@ -24,9 +24,24 @@ script_mod! {
 
 pub fn apply_toggle_button_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     let area = widget.area();
-    set_widget_draw_uniform(cx, area, live_id!(color), &v4(theme.colors.surface_tertiary));
-    set_widget_draw_uniform(cx, area, live_id!(color_hover), &v4(theme.colors.border_hover));
-    set_widget_draw_uniform(cx, area, live_id!(color_down), &v4(theme.colors.border_default));
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color),
+        &v4(theme.colors.surface_tertiary),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_hover),
+        &v4(theme.colors.border_hover),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(color_down),
+        &v4(theme.colors.border_default),
+    );
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
     widget.redraw(cx);
 }

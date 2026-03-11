@@ -28,7 +28,17 @@ pub fn apply_text_input_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     let area = widget.area();
     set_widget_draw_uniform(cx, area, live_id!(color), &v4(theme.colors.surface_primary));
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
-    set_widget_draw_uniform(cx, area, live_id!(border_color), &v4(theme.colors.border_default));
-    set_widget_draw_uniform(cx, area, live_id!(border_color_focus), &v4(theme.colors.border_focus));
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color),
+        &v4(theme.colors.border_default),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color_focus),
+        &v4(theme.colors.border_focus),
+    );
     widget.redraw(cx);
 }

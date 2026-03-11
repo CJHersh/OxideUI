@@ -301,7 +301,12 @@ fn all_themes_returns_two() {
 #[test]
 fn light_themes_are_light() {
     for theme in light_themes() {
-        assert_eq!(theme.mode, ThemeMode::Light, "{} should be Light", theme.name);
+        assert_eq!(
+            theme.mode,
+            ThemeMode::Light,
+            "{} should be Light",
+            theme.name
+        );
     }
 }
 
@@ -350,8 +355,16 @@ fn themes_typography_has_font_family() {
 #[test]
 fn all_themes_have_valid_focus_ring() {
     for theme in all_themes() {
-        assert!(theme.focus_ring.width > 0.0, "{} focus_ring.width", theme.name);
-        assert!(theme.focus_ring.color.w > 0.0, "{} focus_ring.color alpha", theme.name);
+        assert!(
+            theme.focus_ring.width > 0.0,
+            "{} focus_ring.width",
+            theme.name
+        );
+        assert!(
+            theme.focus_ring.color.w > 0.0,
+            "{} focus_ring.color alpha",
+            theme.name
+        );
     }
 }
 
@@ -365,11 +378,20 @@ fn all_themes_colors_in_range() {
     }
     for theme in all_themes() {
         let c = &theme.colors;
-        check_color(c.surface_primary, &format!("{}.surface_primary", theme.name));
+        check_color(
+            c.surface_primary,
+            &format!("{}.surface_primary", theme.name),
+        );
         check_color(c.text_primary, &format!("{}.text_primary", theme.name));
-        check_color(c.interactive_default, &format!("{}.interactive_default", theme.name));
+        check_color(
+            c.interactive_default,
+            &format!("{}.interactive_default", theme.name),
+        );
         check_color(c.border_default, &format!("{}.border_default", theme.name));
-        check_color(c.feedback_success, &format!("{}.feedback_success", theme.name));
+        check_color(
+            c.feedback_success,
+            &format!("{}.feedback_success", theme.name),
+        );
         check_color(c.feedback_error, &format!("{}.feedback_error", theme.name));
     }
 }
@@ -377,8 +399,16 @@ fn all_themes_colors_in_range() {
 #[test]
 fn all_themes_have_radius_xs() {
     for theme in all_themes() {
-        assert!(theme.radius.xs >= 0.0, "{} radius.xs should be non-negative", theme.name);
-        assert!(theme.radius.xs <= theme.radius.sm, "{} radius.xs <= sm", theme.name);
+        assert!(
+            theme.radius.xs >= 0.0,
+            "{} radius.xs should be non-negative",
+            theme.name
+        );
+        assert!(
+            theme.radius.xs <= theme.radius.sm,
+            "{} radius.xs <= sm",
+            theme.name
+        );
     }
 }
 
