@@ -13,9 +13,9 @@ script_mod! {
         flow: Down spacing: 16.
         draw_bg +: {
             color: uniform(#FFFFFF)
-            border_radius: uniform(12.0)
+            border_radius: uniform(8.0)
             border_size: uniform(1.0)
-            border_color: uniform(#E4E4E7)
+            border_color: uniform(#E5E5E5)
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -37,7 +37,7 @@ script_mod! {
     mod.widgets.OxDivider = mod.widgets.SolidView{
         width: Fill height: 1.
         draw_bg +: {
-            color: uniform(#E4E4E7)
+            color: uniform(#E5E5E5)
         }
     }
 

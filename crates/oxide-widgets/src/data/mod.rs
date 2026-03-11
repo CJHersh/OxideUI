@@ -24,7 +24,7 @@ script_mod! {
         padding: Inset{left: 12., right: 12., top: 10., bottom: 10.}
         show_bg: true
         draw_bg +: {
-            color: uniform(#F7F7F8)
+            color: uniform(#F5F5F5)
         }
     }
 
@@ -43,7 +43,7 @@ script_mod! {
         }
         label := Label{
             draw_text +: {
-                color: uniform(#333333)
+                color: uniform(#0A0A0A)
                 text_style +: { font_size: 14. }
             }
             text: "List item"

@@ -40,6 +40,7 @@ pub fn openai_theme() -> Theme {
         spacing: SpacingScale::default(),
         radius: RadiusScale {
             none: 0.0,
+            xs: 2.0,
             sm: 4.0,
             md: 8.0,
             lg: 12.0,
@@ -101,6 +102,7 @@ pub fn openai_dark_theme() -> Theme {
         spacing: SpacingScale::default(),
         radius: RadiusScale {
             none: 0.0,
+            xs: 2.0,
             sm: 4.0,
             md: 8.0,
             lg: 12.0,

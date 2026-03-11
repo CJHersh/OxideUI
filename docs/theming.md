@@ -1,23 +1,34 @@
 # Theming Guide
 
-OxideUI provides a flexible theming system with 6 pre-built themes (3 light + 3 dark) and support for custom themes. DSL definitions use OpenAI Light as the base theme, and `apply_*_theme` functions patch GPU shader uniforms at runtime when themes change.
+## Current State
 
-## Pre-Built Themes
+Components render from their **DSL defaults** using shadcn/ui light values. There is no runtime theme switching active in the showcase or example apps. The DSL is the single source of truth for component appearance.
 
-| Theme | Mode | Accent | Description |
-|-------|------|--------|-------------|
-| **OpenAI** | Light | `#10A37F` | Clean, professional teal |
-| **OpenAI Dark** | Dark | `#19C99D` | Dark variant with brighter teal |
-| **Airbnb** | Light | `#FF5A5F` | Warm, inviting coral |
-| **Airbnb Dark** | Dark | `#FF7B7F` | Dark variant with softer coral |
-| **Notion** | Light | `#346CA3` | Calm, focused blue |
-| **Notion Dark** | Dark | `#529CCA` | Dark variant with lighter blue |
+The theming infrastructure (ThemeEngine, token structs, apply functions) exists in the codebase and is architecturally complete, but is not called at runtime due to a Makepad framework limitation described below.
 
-## Architecture
+## Design Tokens
+
+All components use the shadcn/ui neutral palette:
+
+| Category | Tokens |
+|----------|--------|
+| **Surfaces** | background `#FFFFFF`, secondary `#F5F5F5`, inverse `#171717` |
+| **Text** | foreground `#0A0A0A`, secondary `#737373`, tertiary `#404040`, disabled `#A3A3A3` |
+| **Interactive** | primary `#171717`, hover `#404040`, pressed `#525252` |
+| **Borders** | default `#E5E5E5`, hover `#D4D4D4`, focus `#D4D4D4` |
+| **Feedback** | success `#16A34A`, warning `#F59E0B`, error `#DC2626`, info `#3B82F6` |
+| **Radius** | xs=2, sm=4, md=6 (buttons/inputs), lg=8 (cards), xl=12 |
+| **Font** | Inter (Regular 400, Medium 500, SemiBold 600) |
+
+These values are hardcoded in each component's `script_mod!` DSL block and also defined as typed Rust structs in `oxide-core/src/theme/tokens.rs`.
+
+## Architecture (Planned)
+
+The theming system is designed for runtime theme switching once Makepad's API supports it:
 
 ```
 figma/tokens.json
-    |  (oxide generate)
+    |  (oxide generate -- planned)
     v
 Theme structs (oxide-core)
     |
@@ -31,9 +42,27 @@ apply_*_theme functions (oxide-widgets)
 Widget GPU shader uniforms
 ```
 
-JSON tokens are the source of truth. Codegen produces the `Theme` structs. Each widget module has `apply_*_theme` functions that map semantic tokens onto widget shader uniforms via `set_widget_draw_uniform`.
+### What works today
 
-## Using ThemeEngine
+- **ThemeEngine** -- fully functional: init, switch by name/index, cycle, signal actions
+- **Theme structs** -- complete with all token scales (colors, spacing, radius, typography, shadows, elevation, motion, opacity, focus ring)
+- **Pre-built themes** -- shadcn light/dark returned by `all_themes()`; OpenAI, Airbnb, Notion themes available via individual constructors
+- **`apply_*_theme` functions** -- update `draw_bg` shader uniforms (background color, border color, border radius)
+- **`set_widget_draw_uniform`** -- low-level function that patches GPU shader uniforms on a widget's draw call
+
+### What does not work yet
+
+- **Text color switching** -- Makepad's `WidgetRef::area()` returns the `draw_bg` area on composite widgets like Button. The `draw_text` area is inaccessible through the public API. This means `apply_*_theme` functions can update backgrounds and borders but not text colors.
+- **Full dark mode** -- requires text color switching to look correct. Dark theme tokens are defined (`shadcn_dark_theme()`) but cannot be fully applied at runtime.
+
+### Path forward
+
+1. **Makepad API evolution** -- once `WidgetRef` exposes `draw_text` access or an `apply_over` equivalent, the existing apply functions can be extended to set text uniforms.
+2. **Shader-based approach** -- embed a `mode` uniform in each widget's shader that flips colors in the `pixel()` function, bypassing external uniform updates entirely.
+
+## ThemeEngine API Reference
+
+The ThemeEngine is fully implemented and available for use in custom applications:
 
 ### Initialize
 
@@ -41,235 +70,162 @@ JSON tokens are the source of truth. Codegen produces the `Theme` structs. Each 
 use oxide_core::theme::engine::ThemeEngine;
 use oxide_core::theme::themes::all_themes;
 
-// In handle_startup or before first draw
 ThemeEngine::init(all_themes());
 ```
 
 ### Switch Theme
 
 ```rust
-// By name
-ThemeEngine::switch_by_name("Airbnb");
-
-// By index
+ThemeEngine::switch_by_name("shadcn Dark");
 ThemeEngine::switch(1);
-
-// Cycle
 ThemeEngine::next_theme();
 ThemeEngine::prev_theme();
 ```
 
 ### Switch with Signal
 
-Use the `_and_signal` variants to automatically post a `ThemeChangedAction` that
-other widgets can listen for:
-
 ```rust
-// Posts ThemeChangedAction so handle_actions can react
-ThemeEngine::switch_by_name_and_signal(cx, "Airbnb");
+ThemeEngine::switch_by_name_and_signal(cx, "shadcn Dark");
 ThemeEngine::next_theme_and_signal(cx);
-```
-
-Then in your app:
-
-```rust
-use oxide_core::theme::engine::ThemeChangedAction;
-
-fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions) {
-    if ThemeChangedAction::is_in(actions) {
-        let theme = ThemeEngine::current();
-        self.theme_map.apply_all(cx, &theme);
-        self.ui.redraw(cx);
-    }
-}
 ```
 
 ### Access Current Theme
 
 ```rust
 let theme = ThemeEngine::current();
-let accent = theme.colors.interactive_default;
+let primary = theme.colors.interactive_default;
 let font = theme.typography.font_family;
 ```
 
-## Applying Themes to Widgets
+## Available Themes
 
-### Per-Widget Apply Functions
+### Active (returned by `all_themes()`)
 
-Each widget module provides `apply_*_theme` functions that map semantic tokens to widget properties. Name your widgets with `:=` syntax in the DSL so they can be referenced:
+| Theme | Mode | Primary |
+|-------|------|---------|
+| **shadcn** | Light | `#171717` |
+| **shadcn Dark** | Dark | `#F5F5F5` |
 
-```rust
-// DSL: name widgets
-submit_btn := OxButton{ text: "Submit" }
-cancel_btn := OxButtonSecondary{ text: "Cancel" }
-my_input := OxTextInput{ empty_text: "Type here..." }
-```
-
-Then apply the theme:
+### Available (not in `all_themes()`, use individual constructors)
 
 ```rust
-use oxide_widgets::buttons;
-use oxide_widgets::inputs;
-
-let theme = ThemeEngine::current();
-buttons::apply_button_theme(cx, &self.ui.button(cx, ids!(submit_btn)), &theme);
-buttons::apply_button_secondary_theme(cx, &self.ui.button(cx, ids!(cancel_btn)), &theme);
-inputs::apply_text_input_theme(cx, &self.ui.text_input(cx, ids!(my_input)), &theme);
-self.ui.redraw(cx);
+use oxide_core::theme::themes::{openai_theme, airbnb_theme, notion_theme};
 ```
 
-### Batch Apply with ThemeTarget
+| Theme | Mode | Accent |
+|-------|------|--------|
+| OpenAI | Light/Dark | `#10A37F` |
+| Airbnb | Light/Dark | `#FF5A5F` |
+| Notion | Light/Dark | `#346CA3` |
 
-For convenience, use `apply_theme` with a list of `ThemeTarget` to patch multiple widgets at once:
+## Per-Widget Apply Functions
 
-```rust
-use oxide_widgets::theme_apply::{apply_theme, ThemeTarget};
-use oxide_widgets::{buttons, inputs, display, layout};
+Each widget module provides `apply_*_theme` functions that map semantic tokens to `draw_bg` shader uniforms. These are the library's public API for theme application and will become fully functional once text color switching is resolved.
 
-fn switch_theme(&self, cx: &mut Cx, name: &str) {
-    ThemeEngine::switch_by_name(name);
-    let theme = ThemeEngine::current();
+> **Note:** These functions currently update background colors, border colors, and border radius. Text colors remain at DSL defaults.
 
-    apply_theme(cx, &[
-        ThemeTarget::new(&self.ui.label(cx, ids!(title)), display::apply_label_title_theme),
-        ThemeTarget::new(&self.ui.button(cx, ids!(submit_btn)), buttons::apply_button_theme),
-        ThemeTarget::new(&self.ui.button(cx, ids!(cancel_btn)), buttons::apply_button_secondary_theme),
-        ThemeTarget::new(&self.ui.text_input(cx, ids!(my_input)), inputs::apply_text_input_theme),
-        ThemeTarget::new(&self.ui.view(cx, ids!(card)), layout::apply_card_theme),
-    ], &theme);
+### Buttons (`oxide_widgets::buttons`)
 
-    self.ui.redraw(cx);
-}
-```
+| Function | Widget |
+|----------|--------|
+| `apply_button_theme` | OxButton |
+| `apply_button_secondary_theme` | OxButtonSecondary |
+| `apply_button_ghost_theme` | OxButtonGhost |
+| `apply_button_danger_theme` | OxButtonDanger |
+| `apply_button_outline_theme` | OxButtonOutline |
+| `apply_button_small_theme` | OxButtonSmall |
+| `apply_button_large_theme` | OxButtonLarge |
+| `apply_icon_button_theme` | OxIconButton |
+| `apply_toggle_button_theme` | OxToggleButton |
 
-### Available Apply Functions
+### Inputs (`oxide_widgets::inputs`)
 
-#### Buttons (`oxide_widgets::buttons`)
+| Function | Widget |
+|----------|--------|
+| `apply_text_input_theme` | OxTextInput |
+| `apply_text_area_theme` | OxTextArea |
+| `apply_checkbox_theme` | OxCheckbox |
+| `apply_radio_theme` | OxRadio |
+| `apply_switch_theme` | OxSwitch |
+| `apply_slider_theme` | OxSlider |
 
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_button_theme` | OxButton | `interactive_default/hover/pressed`, `text_inverse`, `radius.md` |
-| `apply_button_secondary_theme` | OxButtonSecondary | `border_default`, `surface_primary/secondary/tertiary`, `text_primary`, `radius.md` |
-| `apply_button_ghost_theme` | OxButtonGhost | `interactive_default` (transparent bg), `radius.md` |
-| `apply_button_danger_theme` | OxButtonDanger | `feedback_error`, `text_inverse`, `radius.md` |
-| `apply_button_small_theme` | OxButtonSmall | Same as primary + `radius.sm`, `font_size_xs` |
-| `apply_button_large_theme` | OxButtonLarge | Same as primary + `radius.lg`, `font_size_md` |
-| `apply_icon_button_theme` | OxIconButton | Transparent bg, `radius.md` |
-| `apply_toggle_button_theme` | OxToggleButton | `surface_tertiary`, `border_hover/default`, `text_primary`, `radius.md` |
+### Display (`oxide_widgets::display`)
 
-#### Inputs (`oxide_widgets::inputs`)
+| Function | Widget |
+|----------|--------|
+| `apply_label_theme` | OxLabel |
+| `apply_label_title_theme` | OxLabelTitle |
+| `apply_label_subtitle_theme` | OxLabelSubtitle |
+| `apply_label_body_theme` | OxLabelBody |
+| `apply_label_caption_theme` | OxLabelCaption |
+| `apply_label_secondary_theme` | OxLabelSecondary |
+| `apply_label_link_theme` | OxLabelLink |
+| `apply_avatar_theme` | OxAvatar (all sizes) |
+| `apply_badge_theme` | OxBadge |
+| `apply_badge_success_theme` | OxBadgeSuccess |
+| `apply_badge_warning_theme` | OxBadgeWarning |
+| `apply_badge_error_theme` | OxBadgeError |
+| `apply_badge_info_theme` | OxBadgeInfo |
+| `apply_icon_theme` | OxIcon |
+| `apply_icon_accent_theme` | OxIcon (accent color) |
+| `apply_icon_secondary_theme` | OxIcon (secondary color) |
 
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_text_input_theme` | OxTextInput | `border_default/focus`, `surface_primary`, `text_primary`, `radius.md`, `font_size_sm` |
-| `apply_text_area_theme` | OxTextArea | Same as text input |
-| `apply_checkbox_theme` | OxCheckbox | `interactive_default`, `text_primary`, `font_size_sm` |
-| `apply_radio_theme` | OxRadio | `interactive_default`, `text_primary`, `font_size_sm` |
-| `apply_switch_theme` | OxSwitch | `interactive_default` |
-| `apply_slider_theme` | OxSlider | `interactive_default` |
+### Layout (`oxide_widgets::layout`)
 
-#### Display (`oxide_widgets::display`)
+| Function | Widget |
+|----------|--------|
+| `apply_card_theme` | OxCard |
+| `apply_divider_theme` | OxDivider |
 
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_label_theme` | OxLabel | `text_primary`, `font_size_md` |
-| `apply_label_title_theme` | OxLabelTitle | `text_primary`, `font_size_xxl` |
-| `apply_label_subtitle_theme` | OxLabelSubtitle | `text_primary`, `font_size_lg` |
-| `apply_label_body_theme` | OxLabelBody | `text_primary`, `font_size_md` |
-| `apply_label_caption_theme` | OxLabelCaption | `text_secondary`, `font_size_xs` |
-| `apply_label_secondary_theme` | OxLabelSecondary | `text_tertiary`, `font_size_sm` |
-| `apply_label_link_theme` | OxLabelLink | `text_link`, `font_size_sm` |
-| `apply_avatar_theme` | OxAvatar (all sizes) | `interactive_default`, `text_inverse` |
-| `apply_badge_theme` | OxBadge | `surface_tertiary`, `text_secondary`, `radius.xl`, `font_size_xs` |
-| `apply_badge_success_theme` | OxBadgeSuccess | `feedback_success` (10% alpha bg), `radius.xl` |
-| `apply_badge_warning_theme` | OxBadgeWarning | `feedback_warning` (10% alpha bg), `radius.xl` |
-| `apply_badge_error_theme` | OxBadgeError | `feedback_error` (10% alpha bg), `radius.xl` |
-| `apply_badge_info_theme` | OxBadgeInfo | `feedback_info` (10% alpha bg), `radius.xl` |
-| `apply_icon_theme` | OxIcon | `text_primary` (icon_color uniform) |
-| `apply_icon_accent_theme` | OxIcon | `interactive_default` (icon_color uniform) |
-| `apply_icon_secondary_theme` | OxIcon | `text_secondary` (icon_color uniform) |
+### Feedback (`oxide_widgets::feedback`)
 
-#### Layout (`oxide_widgets::layout`)
+| Function | Widget |
+|----------|--------|
+| `apply_alert_theme` | OxAlert |
+| `apply_alert_success_theme` | OxAlertSuccess |
+| `apply_alert_warning_theme` | OxAlertWarning |
+| `apply_alert_error_theme` | OxAlertError |
+| `apply_progress_theme` | OxProgress |
+| `apply_skeleton_theme` | OxSkeleton |
 
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_card_theme` | OxCard | `surface_primary`, `radius.lg` |
-| `apply_divider_theme` | OxDivider | `border_default` |
+### Overlay (`oxide_widgets::overlay`)
 
-#### Feedback (`oxide_widgets::feedback`)
+| Function | Widget |
+|----------|--------|
+| `apply_tooltip_theme` | OxTooltip |
+| `apply_popover_theme` | OxPopover |
+| `apply_drawer_theme` | OxDrawer |
+| `apply_menu_theme` | OxMenu |
+| `apply_menu_item_theme` | OxMenuItem |
 
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_alert_theme` | OxAlert | `feedback_info` (10% alpha bg), `radius.md`, `font_size_sm` |
-| `apply_alert_success_theme` | OxAlertSuccess | `feedback_success` (10% alpha bg) |
-| `apply_alert_warning_theme` | OxAlertWarning | `feedback_warning` (10% alpha bg) |
-| `apply_alert_error_theme` | OxAlertError | `feedback_error` (10% alpha bg) |
-| `apply_progress_theme` | OxProgress | `border_default` |
-| `apply_skeleton_theme` | OxSkeleton | `surface_tertiary` |
+### Navigation (`oxide_widgets::navigation`)
 
-#### Overlay (`oxide_widgets::overlay`)
+| Function | Widget |
+|----------|--------|
+| `apply_tab_theme` | OxTab |
 
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_tooltip_theme` | OxTooltip | `surface_inverse`, `text_inverse`, `radius.sm` |
-| `apply_popover_theme` | OxPopover | `surface_primary`, `radius.md` |
-| `apply_drawer_theme` | OxDrawer | `surface_primary` |
-| `apply_menu_theme` | OxMenu | `surface_primary`, `radius.md` |
-| `apply_menu_item_theme` | OxMenuItem | `text_primary`, `font_size_sm` |
+### Data (`oxide_widgets::data`)
 
-#### Navigation (`oxide_widgets::navigation`)
-
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_tab_theme` | OxTab | `text_primary`, `font_size_sm` |
-
-#### Data (`oxide_widgets::data`)
-
-| Function | Widget | Semantic Tokens Used |
-|----------|--------|---------------------|
-| `apply_list_item_theme` | OxListItem | `text_primary`, `font_size_sm` |
-| `apply_table_header_theme` | OxTableHeader | `surface_secondary` |
+| Function | Widget |
+|----------|--------|
+| `apply_list_item_theme` | OxListItem |
+| `apply_table_header_theme` | OxTableHeader |
 
 ## Theme Structure
 
-Each theme contains:
+Each `Theme` struct contains:
 
-- **mode** -- `ThemeMode::Light` or `ThemeMode::Dark`
-- **colors** -- Semantic color palette (22 tokens) -- **applied at runtime**
-- **radius** -- Border radius scale -- **applied at runtime**
-- **opacity** -- Disabled, hover overlay, pressed overlay, backdrop -- **applied at runtime**
-- **focus_ring** -- Color, width, offset for keyboard navigation indicators -- **applied at runtime**
-- **spacing** -- Scale: none, xs, sm, md, lg, xl, xxl -- *defined, not yet applied at runtime*
-- **typography** -- Font family, sizes, weights -- *defined, not yet applied at runtime*
-- **shadows** -- Shadow scale (5 levels) -- *defined, not yet applied at runtime*
-- **elevation** -- Layered depth scale (5 levels) -- *defined, not yet applied at runtime*
-- **motion** -- Animation durations (fast, normal, slow) and easing -- *defined, not yet applied at runtime*
-
-Token categories marked as *"defined, not yet applied"* are available for custom logic
-via `ThemeEngine::current()` but are not automatically updated by `apply_*_theme`
-functions. Runtime application for these categories is planned for a future release.
-
-## Dark Mode
-
-Every built-in theme has a dark variant. Toggle between light and dark:
-
-```rust
-// Toggle dark mode
-let current = ThemeEngine::current();
-let name = if current.name.contains("Dark") {
-    current.name.replace(" Dark", "").to_string()
-} else {
-    format!("{} Dark", current.name)
-};
-ThemeEngine::switch_by_name(&name);
-```
-
-Dark themes have:
-- Darker surface colors with appropriate contrast
-- Brighter accent colors for visibility on dark backgrounds
-- Stronger shadow opacities (since shadows need more opacity to be visible on dark surfaces)
-- Higher hover/pressed overlay opacities for better feedback
-- Higher backdrop opacity for modals
+| Scale | Fields | Status |
+|-------|--------|--------|
+| **colors** | 22 semantic color tokens | Defined in DSL + Theme struct |
+| **radius** | xs, sm, md, lg, xl, full | Defined in DSL + Theme struct |
+| **spacing** | none, xs, sm, md, lg, xl, xxl | Defined in Theme struct |
+| **typography** | font family, 6 sizes, 3 weights | Defined in DSL + Theme struct |
+| **shadows** | 5 levels (none through xl) | Defined in Theme struct |
+| **elevation** | 5 levels (level0 through level4) | Defined in Theme struct |
+| **motion** | fast, normal, slow durations + ease | Defined in Theme struct |
+| **opacity** | disabled, hover overlay, pressed overlay, backdrop | Defined in Theme struct |
+| **focus_ring** | color, width, offset | Defined in Theme struct |
 
 ## Creating Custom Themes
 
@@ -288,9 +244,6 @@ fn my_theme() -> Theme {
             interactive_default: hex_to_vec4("#804DBF"),
             interactive_hover:   hex_to_vec4("#6B3FA3"),
             interactive_pressed: hex_to_vec4("#5A3589"),
-            text_link:           hex_to_vec4("#804DBF"),
-            border_focus:        hex_to_vec4("#804DBF"),
-            feedback_info:       hex_to_vec4("#804DBF"),
             ..Default::default()
         },
         spacing: SpacingScale::default(),
@@ -313,23 +266,22 @@ themes.push(my_theme());
 ThemeEngine::init(themes);
 ```
 
+See `examples/custom-theme/` for a working example.
+
 ## Figma Integration
 
-Sync design tokens from Figma using the Oxide CLI:
+Design tokens live in `figma/tokens.json`. The Oxide CLI can sync from Figma:
 
 ```bash
 oxide config set <FIGMA_TOKEN>
 oxide sync --file-key <FILE_KEY>
-oxide generate
+oxide generate   # codegen planned
 ```
-
-See [Figma Workflow](figma-workflow.md) for details.
 
 ## Best Practices
 
-1. **Initialize early** -- Call `ThemeEngine::init()` in `handle_startup`
-2. **Name your widgets** -- Use `:=` syntax so `apply_theme` can target them
-3. **Use semantic tokens** -- Reference `theme.colors.interactive_default` instead of hardcoded hex
-4. **Batch apply** -- Use `ThemeTarget` lists to apply themes to all widgets at once
-5. **Redraw after switch** -- Call `self.ui.redraw(cx)` after applying the theme
-6. **DSL = base defaults** -- DSL definitions use OpenAI theme values; `apply_*_theme` functions patch uniforms at runtime
+1. **Use Ox-prefixed components** -- they carry correct shadcn styling out of the box
+2. **Stick to DSL defaults** -- avoid overriding colors with hardcoded hex unless intentional
+3. **Name widgets with `:=`** -- enables future theme targeting when runtime switching is available
+4. **Reference token values** -- when you need a color in custom code, use `ThemeEngine::current()` to access the semantic token structs rather than hardcoding hex values
+5. **DSL = shadcn light** -- all widget DSL defaults use shadcn light palette values

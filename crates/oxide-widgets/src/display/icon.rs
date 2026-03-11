@@ -13,7 +13,7 @@ script_mod! {
         show_bg: true
         draw_bg: {
             uniform icon_type: 0.0
-            uniform icon_color: #202023FF
+            uniform icon_color: #0A0A0AFF
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);

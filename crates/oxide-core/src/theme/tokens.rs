@@ -55,26 +55,26 @@ impl Default for SemanticColors {
     fn default() -> Self {
         Self {
             surface_primary: hex_to_vec4("#FFFFFF"),
-            surface_secondary: hex_to_vec4("#F7F7F8"),
-            surface_tertiary: hex_to_vec4("#EAEBEE"),
-            surface_inverse: hex_to_vec4("#202023"),
-            text_primary: hex_to_vec4("#202023"),
-            text_secondary: hex_to_vec4("#676A70"),
-            text_tertiary: hex_to_vec4("#8E8EA0"),
-            text_disabled: hex_to_vec4("#ACACBE"),
-            text_inverse: hex_to_vec4("#FFFFFF"),
-            text_link: hex_to_vec4("#10A37F"),
-            interactive_default: hex_to_vec4("#10A37F"),
-            interactive_hover: hex_to_vec4("#0D8A6A"),
-            interactive_pressed: hex_to_vec4("#0B7359"),
-            interactive_disabled: hex_to_vec4("#C5C5D1"),
-            border_default: hex_to_vec4("#EAEBEE"),
-            border_hover: hex_to_vec4("#D1D3D8"),
-            border_focus: hex_to_vec4("#10A37F"),
-            border_error: hex_to_vec4("#E53935"),
-            feedback_success: hex_to_vec4("#10A37F"),
+            surface_secondary: hex_to_vec4("#F5F5F5"),
+            surface_tertiary: hex_to_vec4("#F5F5F5"),
+            surface_inverse: hex_to_vec4("#171717"),
+            text_primary: hex_to_vec4("#0A0A0A"),
+            text_secondary: hex_to_vec4("#737373"),
+            text_tertiary: hex_to_vec4("#404040"),
+            text_disabled: hex_to_vec4("#A3A3A3"),
+            text_inverse: hex_to_vec4("#FAFAFA"),
+            text_link: hex_to_vec4("#171717"),
+            interactive_default: hex_to_vec4("#171717"),
+            interactive_hover: hex_to_vec4("#404040"),
+            interactive_pressed: hex_to_vec4("#525252"),
+            interactive_disabled: hex_to_vec4("#D4D4D4"),
+            border_default: hex_to_vec4("#E5E5E5"),
+            border_hover: hex_to_vec4("#D4D4D4"),
+            border_focus: hex_to_vec4("#D4D4D4"),
+            border_error: hex_to_vec4("#EF4444"),
+            feedback_success: hex_to_vec4("#16A34A"),
             feedback_warning: hex_to_vec4("#F59E0B"),
-            feedback_error: hex_to_vec4("#E53935"),
+            feedback_error: hex_to_vec4("#DC2626"),
             feedback_info: hex_to_vec4("#3B82F6"),
         }
     }
@@ -101,12 +101,12 @@ impl Default for SpacingScale {
     fn default() -> Self {
         Self {
             none: 0.0,
-            xs: 4.0,
-            sm: 8.0,
+            xs: 8.0,
+            sm: 12.0,
             md: 16.0,
-            lg: 24.0,
-            xl: 32.0,
-            xxl: 48.0,
+            lg: 20.0,
+            xl: 24.0,
+            xxl: 32.0,
         }
     }
 }
@@ -115,6 +115,7 @@ impl Default for SpacingScale {
 #[derive(Clone, Debug)]
 pub struct RadiusScale {
     pub none: f64,
+    pub xs: f64,
     pub sm: f64,
     pub md: f64,
     pub lg: f64,
@@ -126,10 +127,11 @@ impl Default for RadiusScale {
     fn default() -> Self {
         Self {
             none: 0.0,
+            xs: 2.0,
             sm: 4.0,
-            md: 8.0,
-            lg: 12.0,
-            xl: 16.0,
+            md: 6.0,
+            lg: 8.0,
+            xl: 12.0,
             full: 9999.0,
         }
     }
@@ -332,7 +334,7 @@ pub struct FocusRingTokens {
 impl Default for FocusRingTokens {
     fn default() -> Self {
         Self {
-            color: hex_to_vec4("#10A37F"),
+            color: hex_to_vec4("#D4D4D4"),
             width: 2.0,
             offset: 2.0,
         }

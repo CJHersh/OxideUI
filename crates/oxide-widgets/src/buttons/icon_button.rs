@@ -13,9 +13,9 @@ script_mod! {
         align: Center
         draw_bg +: {
             color: uniform(#FFFFFF00)
-            color_hover: uniform(#00000010)
-            color_down: uniform(#00000020)
-            border_radius: uniform(8.0)
+            color_hover: uniform(#0000000D)
+            color_down: uniform(#00000014)
+            border_radius: uniform(6.0)
         }
     }
 }

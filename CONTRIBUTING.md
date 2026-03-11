@@ -46,8 +46,8 @@ type(scope): description
 - **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 - **Scope**: crate or component name (e.g. `button`, `core`, `cli`)
 - **Examples**:
-  - `feat(button): add Danger variant`
-  - `fix(theme): correct hex parsing for 8-digit colors`
+  - `feat(button): add Outline variant`
+  - `fix(badge): correct warning background color`
   - `docs(readme): update quick start instructions`
 
 ## Pull Request Process
@@ -64,12 +64,12 @@ type(scope): description
 When adding or modifying a component, ensure:
 
 - [ ] All states implemented (default, hover, pressed, focused, disabled)
-- [ ] Uses semantic tokens from theme (no hardcoded colors)
+- [ ] Uses shadcn palette values in DSL defaults (see `docs/theming.md` for token reference)
 - [ ] Supports size variants where applicable
 - [ ] Has `script_mod!` DSL integration
-- [ ] Has a matching `apply_*_theme` function
+- [ ] Has a matching `apply_*_theme` function for future runtime theming (updates `draw_bg` uniforms only -- text color switching is not yet possible)
 - [ ] Documented with `///` doc comments
-- [ ] Showcase example updated
+- [ ] Showcase example updated to include the component
 
 ## Project Plan
 

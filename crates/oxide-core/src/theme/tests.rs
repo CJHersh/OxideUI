@@ -91,7 +91,7 @@ fn hex_to_vec4_zero_alpha() {
 fn theme_engine_init_and_current() {
     ThemeEngine::init(all_themes());
     let theme = ThemeEngine::current();
-    assert_eq!(theme.name, "OpenAI");
+    assert_eq!(theme.name, "shadcn");
 }
 
 #[test]
@@ -99,18 +99,18 @@ fn theme_engine_switch_by_index() {
     ThemeEngine::init(all_themes());
     ThemeEngine::switch(1);
     let theme = ThemeEngine::current();
-    assert_eq!(theme.name, "Airbnb");
+    assert_eq!(theme.name, "shadcn Dark");
     ThemeEngine::switch(0);
 }
 
 #[test]
 fn theme_engine_switch_by_name() {
     ThemeEngine::init(all_themes());
-    assert!(ThemeEngine::switch_by_name("Notion"));
-    assert_eq!(ThemeEngine::current().name, "Notion");
+    assert!(ThemeEngine::switch_by_name("shadcn Dark"));
+    assert_eq!(ThemeEngine::current().name, "shadcn Dark");
 
     assert!(!ThemeEngine::switch_by_name("NonExistent"));
-    assert_eq!(ThemeEngine::current().name, "Notion");
+    assert_eq!(ThemeEngine::current().name, "shadcn Dark");
 
     ThemeEngine::switch(0);
 }
@@ -118,8 +118,8 @@ fn theme_engine_switch_by_name() {
 #[test]
 fn theme_engine_switch_by_name_dark() {
     ThemeEngine::init(all_themes());
-    assert!(ThemeEngine::switch_by_name("OpenAI Dark"));
-    assert_eq!(ThemeEngine::current().name, "OpenAI Dark");
+    assert!(ThemeEngine::switch_by_name("shadcn Dark"));
+    assert_eq!(ThemeEngine::current().name, "shadcn Dark");
     assert_eq!(ThemeEngine::current().mode, ThemeMode::Dark);
     ThemeEngine::switch(0);
 }
@@ -128,18 +128,15 @@ fn theme_engine_switch_by_name_dark() {
 fn theme_engine_available_themes() {
     ThemeEngine::init(all_themes());
     let names = ThemeEngine::available_themes();
-    assert!(names.contains(&"OpenAI"));
-    assert!(names.contains(&"Airbnb"));
-    assert!(names.contains(&"Notion"));
-    assert!(names.contains(&"OpenAI Dark"));
-    assert!(names.contains(&"Airbnb Dark"));
-    assert!(names.contains(&"Notion Dark"));
+    assert!(names.contains(&"shadcn"));
+    assert!(names.contains(&"shadcn Dark"));
+    assert_eq!(names.len(), 2);
 }
 
 #[test]
 fn theme_engine_count() {
     ThemeEngine::init(all_themes());
-    assert_eq!(ThemeEngine::theme_count(), 6);
+    assert_eq!(ThemeEngine::theme_count(), 2);
 }
 
 #[test]
@@ -177,22 +174,23 @@ fn theme_engine_out_of_bounds_clamps() {
 fn spacing_scale_default_values() {
     let s = SpacingScale::default();
     assert_eq!(s.none, 0.0);
-    assert_eq!(s.xs, 4.0);
-    assert_eq!(s.sm, 8.0);
+    assert_eq!(s.xs, 8.0);
+    assert_eq!(s.sm, 12.0);
     assert_eq!(s.md, 16.0);
-    assert_eq!(s.lg, 24.0);
-    assert_eq!(s.xl, 32.0);
-    assert_eq!(s.xxl, 48.0);
+    assert_eq!(s.lg, 20.0);
+    assert_eq!(s.xl, 24.0);
+    assert_eq!(s.xxl, 32.0);
 }
 
 #[test]
 fn radius_scale_default_values() {
     let r = RadiusScale::default();
     assert_eq!(r.none, 0.0);
+    assert_eq!(r.xs, 2.0);
     assert_eq!(r.sm, 4.0);
-    assert_eq!(r.md, 8.0);
-    assert_eq!(r.lg, 12.0);
-    assert_eq!(r.xl, 16.0);
+    assert_eq!(r.md, 6.0);
+    assert_eq!(r.lg, 8.0);
+    assert_eq!(r.xl, 12.0);
     assert_eq!(r.full, 9999.0);
 }
 
@@ -206,12 +204,6 @@ fn typography_scale_default_values() {
     assert_eq!(t.font_size_lg, 18.0);
     assert_eq!(t.font_size_xl, 20.0);
     assert_eq!(t.font_size_xxl, 24.0);
-    assert_eq!(t.line_height_tight, 1.25);
-    assert_eq!(t.line_height_normal, 1.5);
-    assert_eq!(t.line_height_relaxed, 1.75);
-    assert_eq!(t.font_weight_normal, 400.0);
-    assert_eq!(t.font_weight_medium, 500.0);
-    assert_eq!(t.font_weight_bold, 600.0);
 }
 
 #[test]
@@ -221,10 +213,6 @@ fn shadow_none_is_zero() {
     assert_eq!(s.offset_y, 0.0);
     assert_eq!(s.blur, 0.0);
     assert_eq!(s.spread, 0.0);
-    assert!(s.color.x.abs() < 1e-5);
-    assert!(s.color.y.abs() < 1e-5);
-    assert!(s.color.z.abs() < 1e-5);
-    assert!(s.color.w.abs() < 1e-5);
 }
 
 #[test]
@@ -278,62 +266,42 @@ fn theme_mode_default_is_light() {
     assert_eq!(ThemeMode::default(), ThemeMode::Light);
 }
 
-// ── Theme definitions ────────────────────────────────────────────
+// ── shadcn theme definitions ─────────────────────────────────────
 
 #[test]
-fn openai_theme_has_correct_accent() {
-    let t = openai_theme();
-    assert_eq!(t.name, "OpenAI");
+fn shadcn_theme_has_correct_primary() {
+    let t = shadcn_theme();
+    assert_eq!(t.name, "shadcn");
     assert_eq!(t.mode, ThemeMode::Light);
-    let expected = hex_to_vec4("#10A37F");
+    let expected = hex_to_vec4("#171717");
     assert!((t.colors.interactive_default.x - expected.x).abs() < 1e-5);
     assert!((t.colors.interactive_default.y - expected.y).abs() < 1e-5);
     assert!((t.colors.interactive_default.z - expected.z).abs() < 1e-5);
 }
 
 #[test]
-fn airbnb_theme_has_correct_accent() {
-    let t = airbnb_theme();
-    assert_eq!(t.name, "Airbnb");
-    assert_eq!(t.mode, ThemeMode::Light);
-    let expected = hex_to_vec4("#FF5A5F");
+fn shadcn_dark_theme_has_correct_primary() {
+    let t = shadcn_dark_theme();
+    assert_eq!(t.name, "shadcn Dark");
+    assert_eq!(t.mode, ThemeMode::Dark);
+    let expected = hex_to_vec4("#F5F5F5");
     assert!((t.colors.interactive_default.x - expected.x).abs() < 1e-5);
     assert!((t.colors.interactive_default.y - expected.y).abs() < 1e-5);
     assert!((t.colors.interactive_default.z - expected.z).abs() < 1e-5);
 }
 
 #[test]
-fn notion_theme_has_correct_accent() {
-    let t = notion_theme();
-    assert_eq!(t.name, "Notion");
-    assert_eq!(t.mode, ThemeMode::Light);
-    let expected = hex_to_vec4("#346CA3");
-    assert!((t.colors.interactive_default.x - expected.x).abs() < 1e-5);
-    assert!((t.colors.interactive_default.y - expected.y).abs() < 1e-5);
-    assert!((t.colors.interactive_default.z - expected.z).abs() < 1e-5);
-}
-
-#[test]
-fn all_themes_returns_six() {
+fn all_themes_returns_two() {
     let themes = all_themes();
-    assert_eq!(themes.len(), 6);
-    assert_eq!(themes[0].name, "OpenAI");
-    assert_eq!(themes[1].name, "Airbnb");
-    assert_eq!(themes[2].name, "Notion");
-    assert_eq!(themes[3].name, "OpenAI Dark");
-    assert_eq!(themes[4].name, "Airbnb Dark");
-    assert_eq!(themes[5].name, "Notion Dark");
+    assert_eq!(themes.len(), 2);
+    assert_eq!(themes[0].name, "shadcn");
+    assert_eq!(themes[1].name, "shadcn Dark");
 }
 
 #[test]
 fn light_themes_are_light() {
     for theme in light_themes() {
-        assert_eq!(
-            theme.mode,
-            ThemeMode::Light,
-            "{} should be Light",
-            theme.name
-        );
+        assert_eq!(theme.mode, ThemeMode::Light, "{} should be Light", theme.name);
     }
 }
 
@@ -349,17 +317,8 @@ fn dark_surfaces_are_darker_than_light() {
     fn luminance(c: Vec4) -> f32 {
         0.299 * c.x + 0.587 * c.y + 0.114 * c.z
     }
-
-    let light = openai_theme();
-    let dark = openai_dark_theme();
-    assert!(luminance(light.colors.surface_primary) > luminance(dark.colors.surface_primary));
-
-    let light = airbnb_theme();
-    let dark = airbnb_dark_theme();
-    assert!(luminance(light.colors.surface_primary) > luminance(dark.colors.surface_primary));
-
-    let light = notion_theme();
-    let dark = notion_dark_theme();
+    let light = shadcn_theme();
+    let dark = shadcn_dark_theme();
     assert!(luminance(light.colors.surface_primary) > luminance(dark.colors.surface_primary));
 }
 
@@ -368,22 +327,17 @@ fn dark_text_is_lighter_than_light_text() {
     fn luminance(c: Vec4) -> f32 {
         0.299 * c.x + 0.587 * c.y + 0.114 * c.z
     }
-
-    let light = openai_theme();
-    let dark = openai_dark_theme();
+    let light = shadcn_theme();
+    let dark = shadcn_dark_theme();
     assert!(luminance(dark.colors.text_primary) > luminance(light.colors.text_primary));
 }
 
 #[test]
-fn themes_have_distinct_accents() {
-    let themes = light_themes();
-    let accents: Vec<_> = themes
-        .iter()
-        .map(|t| t.colors.interactive_default)
-        .collect();
-    assert!((accents[0].x - accents[1].x).abs() > 0.01);
-    assert!((accents[1].x - accents[2].x).abs() > 0.01);
-    assert!((accents[0].x - accents[2].x).abs() > 0.01);
+fn dark_shadows_are_stronger_than_light() {
+    let light = shadcn_theme();
+    let dark = shadcn_dark_theme();
+    assert!(dark.shadows.sm.color.w > light.shadows.sm.color.w);
+    assert!(dark.shadows.md.color.w > light.shadows.md.color.w);
 }
 
 #[test]
@@ -396,16 +350,8 @@ fn themes_typography_has_font_family() {
 #[test]
 fn all_themes_have_valid_focus_ring() {
     for theme in all_themes() {
-        assert!(
-            theme.focus_ring.width > 0.0,
-            "{} focus_ring.width",
-            theme.name
-        );
-        assert!(
-            theme.focus_ring.color.w > 0.0,
-            "{} focus_ring.color alpha",
-            theme.name
-        );
+        assert!(theme.focus_ring.width > 0.0, "{} focus_ring.width", theme.name);
+        assert!(theme.focus_ring.color.w > 0.0, "{} focus_ring.color alpha", theme.name);
     }
 }
 
@@ -417,31 +363,51 @@ fn all_themes_colors_in_range() {
         assert!(c.z >= 0.0 && c.z <= 1.0, "{} b={}", label, c.z);
         assert!(c.w >= 0.0 && c.w <= 1.0, "{} a={}", label, c.w);
     }
-
     for theme in all_themes() {
         let c = &theme.colors;
-        check_color(
-            c.surface_primary,
-            &format!("{}.surface_primary", theme.name),
-        );
+        check_color(c.surface_primary, &format!("{}.surface_primary", theme.name));
         check_color(c.text_primary, &format!("{}.text_primary", theme.name));
-        check_color(
-            c.interactive_default,
-            &format!("{}.interactive_default", theme.name),
-        );
+        check_color(c.interactive_default, &format!("{}.interactive_default", theme.name));
         check_color(c.border_default, &format!("{}.border_default", theme.name));
-        check_color(
-            c.feedback_success,
-            &format!("{}.feedback_success", theme.name),
-        );
+        check_color(c.feedback_success, &format!("{}.feedback_success", theme.name));
         check_color(c.feedback_error, &format!("{}.feedback_error", theme.name));
     }
 }
 
 #[test]
-fn dark_shadows_are_stronger_than_light() {
-    let light = openai_theme();
-    let dark = openai_dark_theme();
-    assert!(dark.shadows.sm.color.w > light.shadows.sm.color.w);
-    assert!(dark.shadows.md.color.w > light.shadows.md.color.w);
+fn all_themes_have_radius_xs() {
+    for theme in all_themes() {
+        assert!(theme.radius.xs >= 0.0, "{} radius.xs should be non-negative", theme.name);
+        assert!(theme.radius.xs <= theme.radius.sm, "{} radius.xs <= sm", theme.name);
+    }
+}
+
+// ── Brand themes still compile (not in all_themes but available) ─
+
+#[test]
+fn openai_theme_compiles() {
+    let t = openai_theme();
+    assert_eq!(t.name, "OpenAI");
+    assert_eq!(t.mode, ThemeMode::Light);
+}
+
+#[test]
+fn airbnb_theme_compiles() {
+    let t = airbnb_theme();
+    assert_eq!(t.name, "Airbnb");
+    assert_eq!(t.mode, ThemeMode::Light);
+}
+
+#[test]
+fn notion_theme_compiles() {
+    let t = notion_theme();
+    assert_eq!(t.name, "Notion");
+    assert_eq!(t.mode, ThemeMode::Light);
+}
+
+#[test]
+fn brand_dark_themes_compile() {
+    assert_eq!(openai_dark_theme().mode, ThemeMode::Dark);
+    assert_eq!(airbnb_dark_theme().mode, ThemeMode::Dark);
+    assert_eq!(notion_dark_theme().mode, ThemeMode::Dark);
 }

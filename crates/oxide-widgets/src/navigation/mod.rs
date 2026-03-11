@@ -19,7 +19,7 @@ script_mod! {
         padding: Inset{left: 16., right: 16., top: 10., bottom: 0.}
         label := Label{
             draw_text +: {
-                color: uniform(#333333)
+                color: uniform(#0A0A0A)
                 text_style +: { font_size: 14. }
             }
             text: "Tab"
@@ -28,7 +28,7 @@ script_mod! {
             width: Fill height: 2.
             margin: Inset{top: 8.}
             draw_bg +: {
-                color: uniform(#10A37F)
+                color: uniform(#171717)
                 border_radius: uniform(1.0)
             }
         }
@@ -42,7 +42,7 @@ script_mod! {
 
     mod.widgets.OxBreadcrumbSeparator = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#999999)
+            color: uniform(#A3A3A3)
             text_style +: { font_size: 14. }
         }
         text: "/"

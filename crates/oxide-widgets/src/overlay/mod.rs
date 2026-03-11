@@ -12,12 +12,12 @@ script_mod! {
         visible: false
         padding: Inset{left: 8., right: 8., top: 6., bottom: 6.}
         draw_bg +: {
-            color: uniform(#333333)
+            color: uniform(#171717)
             border_radius: uniform(4.0)
         }
         label := Label{
             draw_text +: {
-                color: uniform(#FFFFFF)
+                color: uniform(#FAFAFA)
                 text_style +: { font_size: 12. }
             }
             text: "Tooltip"
@@ -31,7 +31,7 @@ script_mod! {
         flow: Down
         draw_bg +: {
             color: uniform(#FFFFFF)
-            border_radius: uniform(8.0)
+            border_radius: uniform(6.0)
         }
     }
 
@@ -49,7 +49,7 @@ script_mod! {
         flow: Down padding: 4.
         draw_bg +: {
             color: uniform(#FFFFFF)
-            border_radius: uniform(8.0)
+            border_radius: uniform(6.0)
         }
     }
 
@@ -63,7 +63,7 @@ script_mod! {
         }
         label := Label{
             draw_text +: {
-                color: uniform(#333333)
+                color: uniform(#0A0A0A)
                 text_style +: { font_size: 14. }
             }
             text: "Menu Item"

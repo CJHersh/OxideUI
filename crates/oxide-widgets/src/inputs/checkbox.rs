@@ -14,10 +14,10 @@ script_mod! {
             size: 8.0
         }
         draw_icon +: {
-            color: uniform(#10A37F)
+            color: uniform(#171717)
         }
         draw_text +: {
-            color: uniform(#202023)
+            color: uniform(#0A0A0A)
             text_style +: { font_size: 14. }
         }
     }

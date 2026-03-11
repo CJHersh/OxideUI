@@ -1,19 +1,44 @@
 # OxideUI
 
-**The industry's first Multi-Skin Rust component library**
+**A high-quality Rust component kit built on Makepad**
 
 [![CI](https://github.com/CJHersh/OxideUI/actions/workflows/ci.yml/badge.svg)](https://github.com/CJHersh/OxideUI/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue.svg)
 [![Rust](https://img.shields.io/badge/rust-stable-orange.svg)](https://www.rust-lang.org/)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20Web%20%7C%20Android%20%7C%20iOS-lightgrey.svg)](https://github.com/makepad/makepad)
 
-Build once, then toggle between pre-built themes at runtime. OxideUI is a high-performance, type-safe component kit for the Rust ecosystem—powered by [Makepad](https://github.com/makepad/makepad) (dev branch) and Figma Variables.
+OxideUI is a production-grade component library for Rust, styled with the [shadcn/ui](https://ui.shadcn.com/) design language and powered by [Makepad](https://github.com/makepad/makepad)'s GPU-accelerated rendering. Components render with pixel-perfect defaults out of the box -- no configuration needed.
 
 ---
 
-## Overview
+## Features
 
-OxideUI bridges the gap between high-level design systems and low-level performance. It allows you to switch between world-class design languages (OpenAI, Airbnb, Notion, and more) or inject your own—all at runtime with GPU-accelerated rendering.
+| Feature | Description |
+|---------|-------------|
+| **shadcn Design Language** | Components styled to match shadcn/ui -- Inter font, neutral palette, precise spacing and border radius from Figma design tokens. |
+| **Cross-Platform** | Native macOS, Windows, Linux, Android, iOS, and Web -- powered by Makepad. |
+| **GPU-Accelerated** | Built on Makepad's GPU rendering pipeline. SDF-based icons scale perfectly at any size. Hover, pressed, and focus states animate via shader uniforms. |
+| **Type-Safe Token Architecture** | Theme tokens are fully typed Rust structs: semantic colors, spacing, radius, typography, shadows, elevation, motion, opacity, and focus ring scales. Designed for future runtime theme switching. |
+| **Figma-First** | Design tokens sourced from Figma Variables. The Oxide CLI syncs tokens from Figma to JSON, with codegen to Rust structs planned. |
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **Rust 1.70+** -- install via [rustup](https://rustup.rs/)
+- **Platform deps** -- on Linux you may need: `sudo apt install libx11-dev libxcursor-dev libgl-dev libasound2-dev`
+
+### Try it now
+
+```bash
+git clone https://github.com/CJHersh/OxideUI.git
+cd OxideUI
+cargo run -p oxide-showcase
+```
+
+### Add to your project
 
 ```toml
 # Cargo.toml
@@ -23,70 +48,12 @@ oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
 makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
 ```
 
----
-
-## Features
-
-| Feature | Description |
-|---------|-------------|
-| **Runtime Multi-Theme** | Switch between 6 built-in themes (OpenAI, Airbnb, Notion -- each with light and dark variants) or define your own. GPU uniforms are patched directly—no widget rebuild needed. |
-| **Dark Mode** | First-class dark mode support. Every built-in theme ships with a carefully crafted dark variant. Toggle between light and dark at runtime. |
-| **Figma-First** | Sync Figma Variables directly to Rust structs via the Oxide CLI. Design and code stay in sync. |
-| **Cross-Platform** | Native macOS, Windows, Linux, Android, iOS, and Web—powered by Makepad. |
-| **GPU-Accelerated** | Built on Makepad's GPU-accelerated rendering pipeline. SDF-based icons and theme changes patch shader uniforms directly. |
-| **Type-Safe** | Theme tokens are fully typed Rust structs generated from JSON design tokens. Includes semantic colors, spacing, radius, typography, shadows, elevation, motion, opacity, and focus ring tokens. |
-
----
-
-## Quick Start
-
-### Prerequisites
-
-- **Rust 1.70+** — install via [rustup](https://rustup.rs/)
-- **Platform deps** — on Linux you may need: `sudo apt install libx11-dev libxcursor-dev libgl-dev libasound2-dev` (or your distro's equivalents)
-
-### Try it now
-
-The fastest way to see OxideUI in action is to run the built-in showcase:
-
-```bash
-git clone https://github.com/CJHersh/OxideUI.git
-cd OxideUI
-cargo run -p oxide-showcase
-```
-
-### Option 1: Scaffold a new project with the CLI
-
-```bash
-git clone https://github.com/CJHersh/OxideUI.git
-cd OxideUI
-cargo install --path crates/oxide-cli
-oxide new my-app
-cd my-app
-cargo run
-```
-
-### Option 2: Add to an existing project
-
-Add to your `Cargo.toml`:
-
-```toml
-[dependencies]
-oxide-widgets = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
-oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
-makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
-```
-
 ### Basic example
 
-OxideUI uses Makepad's [`script_mod!`](https://github.com/makepad/makepad) DSL (part of the Splash scripting layer) for widget definitions, and `ThemeEngine` for runtime theme switching. This replaces the older `live_design!` macro with a more expressive scripting syntax:
+OxideUI uses Makepad's `script_mod!` DSL for widget definitions. Components render with their built-in shadcn styling -- just use them:
 
 ```rust
 use makepad_widgets::*;
-use oxide_core::theme::engine::ThemeEngine;
-use oxide_core::theme::themes::all_themes;
-use oxide_widgets::ThemeMap;
-use oxide_widgets::{buttons, display, layout};
 
 app_main!(App);
 
@@ -99,11 +66,18 @@ script_mod! {
             main_window := Window{
                 body +: {
                     View{
-                        flow: Down padding: 32 spacing: 24
-                        title := OxLabelTitle{ text: "Hello OxideUI" }
-                        card := OxCard{
-                            submit := OxButton{ text: "Submit" }
-                            cancel := OxButtonSecondary{ text: "Cancel" }
+                        flow: Down padding: 32 spacing: 16
+
+                        OxLabelTitle{ text: "Hello OxideUI" }
+
+                        OxCard{
+                            OxLabelCaption{ text: "A simple form" }
+                            OxTextInput{ empty_text: "Your name..." }
+                            View{
+                                flow: Right spacing: 8
+                                OxButton{ text: "Submit" }
+                                OxButtonSecondary{ text: "Cancel" }
+                            }
                         }
                     }
                 }
@@ -124,28 +98,11 @@ impl App {
         crate::oxide_widgets::script_mod(vm);
         App::from_script_mod(vm, self::script_mod)
     }
-
-    fn theme_map(&self) -> ThemeMap {
-        ThemeMap::builder(&self.ui)
-            .add(live_id!(title), display::apply_label_title_theme)
-            .add(live_id!(card), layout::apply_card_theme)
-            .add(live_id!(submit), buttons::apply_button_theme)
-            .add(live_id!(cancel), buttons::apply_button_secondary_theme)
-            .build()
-    }
-
-    fn switch_theme(&self, cx: &mut Cx, name: &str) {
-        ThemeEngine::switch_by_name(name);
-        let theme = ThemeEngine::current();
-        self.theme_map().apply_all(cx, &theme);
-        self.ui.redraw(cx);
-    }
 }
 
 impl MatchEvent for App {
-    fn handle_startup(&mut self, _cx: &mut Cx) {
-        ThemeEngine::init(all_themes());
-    }
+    fn handle_startup(&mut self, _cx: &mut Cx) {}
+    fn handle_actions(&mut self, _cx: &mut Cx, _actions: &Actions) {}
 }
 
 impl AppMain for App {
@@ -156,18 +113,13 @@ impl AppMain for App {
 }
 ```
 
-Key points:
-- Widgets must be **named** with `:=` syntax (e.g. `submit := OxButton{}`) so they can be targeted for theme patching.
-- Call `ThemeEngine::init(all_themes())` in `handle_startup` before switching themes.
-- Use `ThemeMap` to build a reusable mapping of widget IDs to theme-apply functions, then call `apply_all()` on each theme switch.
-
 ---
 
 ## Components
 
 | Category | Components |
 |----------|------------|
-| **Buttons** | OxButton, OxButtonSecondary, OxButtonGhost, OxButtonDanger, OxButtonSmall, OxButtonLarge, OxIconButton, OxButtonGroup, OxToggleButton |
+| **Buttons** | OxButton, OxButtonSecondary, OxButtonOutline, OxButtonGhost, OxButtonDanger, OxButtonSmall, OxButtonLarge, OxIconButton, OxButtonGroup, OxToggleButton |
 | **Inputs** | OxTextInput, OxTextArea, OxCheckbox, OxRadio, OxSwitch, OxSlider |
 | **Display** | OxLabel (Title, Subtitle, Body, Caption, Secondary, Link), OxBadge (Success, Warning, Error, Info), OxAvatar (Small, Large, XLarge), OxIcon |
 | **Layout** | OxCard, OxDivider, OxStack, OxGrid |
@@ -176,74 +128,63 @@ Key points:
 | **Overlay** | OxTooltip, OxPopover, OxDrawer, OxMenu, OxMenuItem |
 | **Data** | OxTable, OxTableRow, OxTableHeader, OxList, OxListItem, OxTimeline |
 
-All components with backgrounds support: **default**, **hover**, **pressed** states via GPU shader uniforms.
+All interactive components support **default**, **hover**, **pressed**, **focused**, and **disabled** states via GPU shader uniforms.
 
 ---
 
-## Themes
+## Design Tokens
 
-| Theme | Light Accent | Dark Accent | Description |
-|-------|-------------|-------------|-------------|
-| **OpenAI** | `#10A37F` | `#19C99D` | Clean, professional teal (base/default) |
-| **Airbnb** | `#FF5A5F` | `#FF7B7F` | Warm, inviting coral |
-| **Notion** | `#346CA3` | `#529CCA` | Calm, focused blue |
+Components are styled using a structured token system based on shadcn/ui:
 
-All 6 themes (3 light + 3 dark) are built-in and switchable at runtime. Each theme includes:
+- **22 semantic color tokens** -- surfaces, text, interactive states, borders, feedback
+- **Spacing scale** -- xs (8px) through xxl (32px)
+- **Border radius scale** -- xs (2px) through full (pill)
+- **Typography scale** -- Inter font, 6 size levels, 3 weight levels
+- **Shadow & elevation** -- 5 levels each
+- **Motion tokens** -- fast/normal/slow durations
+- **Opacity tokens** -- disabled, hover overlay, pressed overlay, backdrop
+- **Focus ring** -- color, width, offset
 
-- **22 semantic color tokens** (surfaces, text, interactive, borders, feedback)
-- **Spacing scale** (4px grid: xs through xxl)
-- **Border radius scale** (per-theme personality)
-- **Typography scale** (font sizes, line heights, weights)
-- **Shadow & elevation scales** (5 levels each)
-- **Motion tokens** (fast/normal/slow durations)
-- **Opacity tokens** (disabled, hover overlay, pressed overlay, backdrop)
-- **Focus ring tokens** (color, width, offset)
+All token values are defined as typed Rust structs in `oxide-core` and sourced from `figma/tokens.json`. DSL defaults in each component bake in the shadcn light values directly.
 
-### How theming works
+### Theming architecture (planned)
 
-1. **JSON design tokens** (`figma/tokens.json`) are the single source of truth
-2. **Codegen** (`oxide generate`) produces typed `Theme` structs in `oxide-core`
-3. **`ThemeEngine`** manages the active theme globally (atomic switching)
-4. **Per-widget `apply_*_theme` functions** map semantic tokens to shader uniforms via `set_widget_draw_uniform`
-5. **`ThemeMap`** builds a reusable registry of widget-to-theme bindings; call `apply_all()` to switch in one line
+The codebase includes a full theming infrastructure designed for future runtime theme switching:
 
-DSL definitions bake the OpenAI light theme as defaults. When you switch themes, only the shader uniforms that differ are patched — no widget tree rebuild.
+- **`ThemeEngine`** -- global atomic theme switching with signal-based notifications
+- **`Theme` struct** -- contains all token scales for a complete theme
+- **`apply_*_theme` functions** -- per-widget functions that map semantic tokens to shader uniforms
+- **`ThemeMap`** -- reusable registry of widget-to-theme bindings for batch application
+- **Pre-built themes** -- shadcn (light/dark), OpenAI, Airbnb, Notion (all with dark variants)
 
-### Dark mode
+Runtime switching currently updates background and border uniforms but cannot update text colors due to a Makepad framework limitation (composite widgets like Button expose only `draw_bg` through `WidgetRef`, not `draw_text`). Full theme switching will be enabled as the Makepad API evolves.
 
-Toggle between light and dark with a single call:
-
-```rust
-// Switch to dark variant of current theme
-let current = ThemeEngine::current();
-let dark_name = format!("{} Dark", current.name);
-ThemeEngine::switch_by_name(&dark_name);
-```
-
----
-
-## Documentation
-
-- [Getting Started](docs/getting-started.md)
-- [Theming Guide](docs/theming.md)
-- [Button Component](docs/components/button.md)
-- [Figma Workflow](docs/figma-workflow.md)
-- [Project Plan](PROJECT_PLAN.md)
+See [docs/theming.md](docs/theming.md) for the complete theming guide.
 
 ---
 
 ## Examples
 
 ```bash
-# Full component showcase
+# Component showcase -- all widgets with shadcn styling
 cargo run -p oxide-showcase
 
-# Theme switcher demo
+# Static component demo
 cargo run -p oxide-theme-switcher
 
-# Custom theme example
+# ThemeEngine API demonstration (custom purple theme)
 cargo run -p oxide-custom-theme
 ```
+
+---
+
+## Roadmap
+
+- **Component polish** -- pixel-perfect shadcn styling across all components
+- **Dark mode** -- dark theme tokens are defined; pending Makepad API support for full text color switching
+- **Runtime theme switching** -- ThemeEngine infrastructure is built; waiting on `draw_text` access through `WidgetRef`
+- **Brand themes** -- OpenAI, Airbnb, Notion theme definitions exist in `oxide-core`, ready to activate
+- **Figma codegen** -- `oxide generate` to produce Theme structs from `figma/tokens.json`
 
 ---
 
@@ -255,7 +196,7 @@ OxideUI/
 │   ├── oxide-core/         # Theme tokens, ThemeEngine, semantic colors
 │   ├── oxide-widgets/      # UI components + per-widget apply_theme functions
 │   │   └── src/
-│   │       ├── theme_apply.rs  # ThemeMap, apply_theme, set_widget_draw_uniform
+│   │       ├── theme_apply.rs  # ThemeMap, set_widget_draw_uniform, v4
 │   │       ├── buttons/        # OxButton, OxIconButton, OxToggleButton, etc.
 │   │       ├── inputs/         # OxTextInput, OxCheckbox, OxSlider, etc.
 │   │       ├── display/        # OxLabel, OxAvatar, OxBadge, OxIcon
@@ -266,9 +207,9 @@ OxideUI/
 │   │       └── data/           # OxTable, OxList, OxTimeline
 │   └── oxide-cli/          # Figma sync, codegen, scaffolding
 ├── examples/
-│   ├── showcase/            # Component gallery
-│   ├── theme-switcher/      # Theme switching demo
-│   └── custom-theme/        # Custom theme example
+│   ├── showcase/            # Component gallery with section navigation
+│   ├── theme-switcher/      # Static component demo
+│   └── custom-theme/        # ThemeEngine API example
 ├── docs/
 └── figma/                   # Design tokens (tokens.json, tokens.schema.json)
 ```

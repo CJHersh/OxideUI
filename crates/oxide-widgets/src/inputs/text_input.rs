@@ -11,14 +11,14 @@ script_mod! {
         width: Fill height: Fit
         empty_text: "Type here..."
         draw_bg +: {
-            border_radius: uniform(8.0)
+            border_radius: uniform(6.0)
             border_size: uniform(1.0)
-            border_color: uniform(#EAEBEE)
-            border_color_focus: uniform(#10A37F)
+            border_color: uniform(#E5E5E5)
+            border_color_focus: uniform(#D4D4D4)
             color: uniform(#FFFFFF)
         }
         draw_text +: {
-            color: uniform(#202023)
+            color: uniform(#0A0A0A)
             text_style +: { font_size: 14. }
         }
     }
@@ -26,18 +26,9 @@ script_mod! {
 
 pub fn apply_text_input_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     let area = widget.area();
+    set_widget_draw_uniform(cx, area, live_id!(color), &v4(theme.colors.surface_primary));
     set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.md as f32]);
-    set_widget_draw_uniform(
-        cx,
-        area,
-        live_id!(border_color),
-        &v4(theme.colors.border_default),
-    );
-    set_widget_draw_uniform(
-        cx,
-        area,
-        live_id!(border_color_focus),
-        &v4(theme.colors.border_focus),
-    );
+    set_widget_draw_uniform(cx, area, live_id!(border_color), &v4(theme.colors.border_default));
+    set_widget_draw_uniform(cx, area, live_id!(border_color_focus), &v4(theme.colors.border_focus));
     widget.redraw(cx);
 }

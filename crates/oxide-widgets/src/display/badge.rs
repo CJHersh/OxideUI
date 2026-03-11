@@ -11,12 +11,12 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{left: 8., right: 8., top: 4., bottom: 4.}
         draw_bg +: {
-            color: uniform(#F0F0F0)
+            color: uniform(#F5F5F5)
             border_radius: uniform(12.0)
         }
         label := Label{
             draw_text +: {
-                color: uniform(#555555)
+                color: uniform(#737373)
                 text_style +: { font_size: 12. }
             }
             text: "Badge"
@@ -27,12 +27,12 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{left: 8., right: 8., top: 4., bottom: 4.}
         draw_bg +: {
-            color: uniform(#ECFDF5)
+            color: uniform(#F0FDF4)
             border_radius: uniform(12.0)
         }
         label := Label{
             draw_text +: {
-                color: uniform(#065F46)
+                color: uniform(#166534)
                 text_style +: { font_size: 12. }
             }
             text: "Success"
@@ -48,7 +48,7 @@ script_mod! {
         }
         label := Label{
             draw_text +: {
-                color: uniform(#93410F)
+                color: uniform(#924011)
                 text_style +: { font_size: 12. }
             }
             text: "Warning"
@@ -59,7 +59,7 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{left: 8., right: 8., top: 4., bottom: 4.}
         draw_bg +: {
-            color: uniform(#FFF2F2)
+            color: uniform(#FEF2F2)
             border_radius: uniform(12.0)
         }
         label := Label{
@@ -80,7 +80,7 @@ script_mod! {
         }
         label := Label{
             draw_text +: {
-                color: uniform(#2041B0)
+                color: uniform(#1E40AF)
                 text_style +: { font_size: 12. }
             }
             text: "Info"

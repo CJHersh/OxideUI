@@ -40,6 +40,7 @@ pub fn notion_theme() -> Theme {
         spacing: SpacingScale::default(),
         radius: RadiusScale {
             none: 0.0,
+            xs: 2.0,
             sm: 3.0,
             md: 4.0,
             lg: 6.0,
@@ -113,6 +114,7 @@ pub fn notion_dark_theme() -> Theme {
         spacing: SpacingScale::default(),
         radius: RadiusScale {
             none: 0.0,
+            xs: 2.0,
             sm: 3.0,
             md: 4.0,
             lg: 6.0,

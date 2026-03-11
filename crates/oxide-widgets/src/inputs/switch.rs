@@ -15,7 +15,7 @@ script_mod! {
             size: 14.0
         }
         draw_icon +: {
-            color: uniform(#10A37F)
+            color: uniform(#171717)
         }
     }
 }

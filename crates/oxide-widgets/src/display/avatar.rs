@@ -11,12 +11,12 @@ script_mod! {
         width: 40. height: 40.
         align: Center
         draw_bg +: {
-            color: uniform(#666666)
+            color: uniform(#171717)
             border_radius: uniform(20.0)
         }
         initials := Label{
             draw_text +: {
-                color: uniform(#FFFFFF)
+                color: uniform(#FAFAFA)
                 text_style +: { font_size: 14. }
             }
             text: "AB"
@@ -27,12 +27,12 @@ script_mod! {
         width: 32. height: 32.
         align: Center
         draw_bg +: {
-            color: uniform(#666666)
+            color: uniform(#171717)
             border_radius: uniform(16.0)
         }
         initials := Label{
             draw_text +: {
-                color: uniform(#FFFFFF)
+                color: uniform(#FAFAFA)
                 text_style +: { font_size: 11. }
             }
             text: "AB"
@@ -43,12 +43,12 @@ script_mod! {
         width: 56. height: 56.
         align: Center
         draw_bg +: {
-            color: uniform(#666666)
+            color: uniform(#171717)
             border_radius: uniform(28.0)
         }
         initials := Label{
             draw_text +: {
-                color: uniform(#FFFFFF)
+                color: uniform(#FAFAFA)
                 text_style +: { font_size: 18. }
             }
             text: "AB"
@@ -59,12 +59,12 @@ script_mod! {
         width: 80. height: 80.
         align: Center
         draw_bg +: {
-            color: uniform(#666666)
+            color: uniform(#171717)
             border_radius: uniform(40.0)
         }
         initials := Label{
             draw_text +: {
-                color: uniform(#FFFFFF)
+                color: uniform(#FAFAFA)
                 text_style +: { font_size: 24. }
             }
             text: "AB"

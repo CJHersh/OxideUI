@@ -40,6 +40,7 @@ pub fn airbnb_theme() -> Theme {
         spacing: SpacingScale::default(),
         radius: RadiusScale {
             none: 0.0,
+            xs: 4.0,
             sm: 8.0,
             md: 12.0,
             lg: 16.0,
@@ -103,6 +104,7 @@ pub fn airbnb_dark_theme() -> Theme {
         spacing: SpacingScale::default(),
         radius: RadiusScale {
             none: 0.0,
+            xs: 4.0,
             sm: 8.0,
             md: 12.0,
             lg: 16.0,

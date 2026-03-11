@@ -11,13 +11,13 @@ script_mod! {
         width: Fill height: 6.
         show_bg: true
         draw_bg +: {
-            color: uniform(#EAEBEE)
+            color: uniform(#E5E5E5)
             border_radius: uniform(3.0)
         }
         fill := RoundedView{
             width: 120. height: Fill
             draw_bg +: {
-                color: uniform(#10A37F)
+                color: uniform(#171717)
                 border_radius: uniform(3.0)
             }
         }
@@ -28,11 +28,11 @@ script_mod! {
         padding: 12.
         draw_bg +: {
             color: uniform(#EFF6FF)
-            border_radius: uniform(8.0)
+            border_radius: uniform(6.0)
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#2041B0)
+                color: uniform(#1E40AF)
                 text_style +: { font_size: 14. }
             }
             text: "Info alert message"
@@ -43,12 +43,12 @@ script_mod! {
         width: Fill height: Fit
         padding: 12.
         draw_bg +: {
-            color: uniform(#ECFDF5)
-            border_radius: uniform(8.0)
+            color: uniform(#F0FDF4)
+            border_radius: uniform(6.0)
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#065F46)
+                color: uniform(#166534)
                 text_style +: { font_size: 14. }
             }
             text: "Success!"
@@ -60,11 +60,11 @@ script_mod! {
         padding: 12.
         draw_bg +: {
             color: uniform(#FFFBEB)
-            border_radius: uniform(8.0)
+            border_radius: uniform(6.0)
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#93410F)
+                color: uniform(#924011)
                 text_style +: { font_size: 14. }
             }
             text: "Warning"
@@ -75,8 +75,8 @@ script_mod! {
         width: Fill height: Fit
         padding: 12.
         draw_bg +: {
-            color: uniform(#FFF2F2)
-            border_radius: uniform(8.0)
+            color: uniform(#FEF2F2)
+            border_radius: uniform(6.0)
         }
         msg := Label{
             draw_text +: {
@@ -90,7 +90,7 @@ script_mod! {
     mod.widgets.OxSkeleton = mod.widgets.RoundedView{
         width: Fill height: 16.
         draw_bg +: {
-            color: uniform(#EAEBEE)
+            color: uniform(#F5F5F5)
             border_radius: uniform(4.0)
         }
     }
@@ -98,7 +98,7 @@ script_mod! {
     mod.widgets.OxSkeletonCircle = mod.widgets.RoundedView{
         width: 40. height: 40.
         draw_bg +: {
-            color: uniform(#EAEBEE)
+            color: uniform(#F5F5F5)
             border_radius: uniform(20.0)
         }
     }
@@ -106,7 +106,7 @@ script_mod! {
     mod.widgets.OxSkeletonText = mod.widgets.RoundedView{
         width: Fill height: 12.
         draw_bg +: {
-            color: uniform(#EAEBEE)
+            color: uniform(#F5F5F5)
             border_radius: uniform(3.0)
         }
     }

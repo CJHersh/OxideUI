@@ -87,9 +87,7 @@ script_mod! {
 
                         View{
                             flow: Right spacing: 12
-                            btn_openai := OxButton{ text: "OpenAI" }
-                            btn_airbnb := OxButton{ text: "Airbnb" }
-                            btn_notion := OxButton{ text: "Notion" }
+                            btn_shadcn := OxButton{ text: "shadcn" }
                             btn_purple := OxButton{ text: "Purple (Custom)" }
                         }
 
@@ -104,7 +102,7 @@ script_mod! {
                             }
                         }
 
-                        current_theme := OxLabelCaption{ text: "Active: OpenAI" }
+                        current_theme := OxLabelCaption{ text: "Active: shadcn" }
                     }
                 }
             }
@@ -130,9 +128,7 @@ impl App {
                 live_id!(subtitle_label),
                 display::apply_label_secondary_theme,
             )
-            .add(live_id!(btn_openai), buttons::apply_button_theme)
-            .add(live_id!(btn_airbnb), buttons::apply_button_theme)
-            .add(live_id!(btn_notion), buttons::apply_button_theme)
+            .add(live_id!(btn_shadcn), buttons::apply_button_theme)
             .add(live_id!(btn_purple), buttons::apply_button_theme)
             .add(live_id!(sample_card), layout::apply_card_theme)
             .add(live_id!(card_subtitle), display::apply_label_subtitle_theme)
@@ -163,14 +159,8 @@ impl MatchEvent for App {
     }
 
     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions) {
-        if self.ui.button(cx, ids!(btn_openai)).clicked(actions) {
-            self.switch_theme(cx, "OpenAI");
-        }
-        if self.ui.button(cx, ids!(btn_airbnb)).clicked(actions) {
-            self.switch_theme(cx, "Airbnb");
-        }
-        if self.ui.button(cx, ids!(btn_notion)).clicked(actions) {
-            self.switch_theme(cx, "Notion");
+        if self.ui.button(cx, ids!(btn_shadcn)).clicked(actions) {
+            self.switch_theme(cx, "shadcn");
         }
         if self.ui.button(cx, ids!(btn_purple)).clicked(actions) {
             self.switch_theme(cx, "Purple");
