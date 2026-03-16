@@ -9,49 +9,49 @@ script_mod! {
 
     mod.widgets.OxLabel = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#0A0A0A)
+            color: #0A0A0A
             text_style +: { font_size: 16. }
         }
     }
 
     mod.widgets.OxLabelTitle = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#0A0A0A)
+            color: #0A0A0A
             text_style +: { font_size: 24. }
         }
     }
 
     mod.widgets.OxLabelSubtitle = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#0A0A0A)
+            color: #0A0A0A
             text_style +: { font_size: 18. }
         }
     }
 
     mod.widgets.OxLabelBody = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#404040)
+            color: #404040
             text_style +: { font_size: 16. }
         }
     }
 
     mod.widgets.OxLabelCaption = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#737373)
+            color: #737373
             text_style +: { font_size: 12. }
         }
     }
 
     mod.widgets.OxLabelSecondary = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#A3A3A3)
+            color: #A3A3A3
             text_style +: { font_size: 14. }
         }
     }
 
     mod.widgets.OxLabelLink = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#171717)
+            color: #171717
             text_style +: { font_size: 14. }
         }
     }

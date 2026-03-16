@@ -10,14 +10,14 @@ script_mod! {
     mod.widgets.OxToggleButton = mod.widgets.ButtonFlat{
         text: "Toggle"
         draw_bg +: {
-            color: uniform(#F5F5F5FF)
-            color_hover: uniform(#E5E5E5FF)
-            color_down: uniform(#D4D4D4FF)
-            border_radius: uniform(6.0)
+            color: #F5F5F5FF
+            color_hover: #E5E5E5FF
+            color_down: #D4D4D4FF
+            border_radius: 6.0
         }
         draw_text +: {
-            color: uniform(#0A0A0A)
-            color_hover: uniform(#0A0A0A)
+            color: #0A0A0A
+            color_hover: #0A0A0A
         }
     }
 }

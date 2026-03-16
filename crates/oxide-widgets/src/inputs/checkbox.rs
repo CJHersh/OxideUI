@@ -9,15 +9,11 @@ script_mod! {
 
     mod.widgets.OxCheckbox = mod.widgets.CheckBox{
         text: "Checkbox"
-        draw_check: {
-            check_type: Check
-            size: 8.0
-        }
         draw_icon +: {
-            color: uniform(#171717)
+            color: #171717
         }
         draw_text +: {
-            color: uniform(#0A0A0A)
+            color: #0A0A0A
             text_style +: { font_size: 14. }
         }
     }

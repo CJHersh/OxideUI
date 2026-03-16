@@ -11,14 +11,31 @@ script_mod! {
         width: Fill height: 6.
         show_bg: true
         draw_bg +: {
-            color: uniform(#E5E5E5)
+            progress: instance(0.5)
+            track_color: uniform(#E5E5E5)
+            fill_color: uniform(#171717)
             border_radius: uniform(3.0)
-        }
-        fill := RoundedView{
-            width: 120. height: Fill
-            draw_bg +: {
-                color: uniform(#171717)
-                border_radius: uniform(3.0)
+
+            pixel: fn() {
+                let sdf = Sdf2d.viewport(self.pos * self.rect_size)
+                let sz = self.rect_size
+                let r = self.border_radius
+
+                sdf.box(0.0, 0.0, sz.x, sz.y, r)
+                sdf.fill(self.track_color)
+
+                let fill_w = sz.x * clamp(self.progress, 0.0, 1.0)
+                if fill_w > 0.5 {
+                    let sdf2 = Sdf2d.viewport(self.pos * self.rect_size)
+                    sdf2.box(0.0, 0.0, fill_w, sz.y, r)
+                    sdf2.fill(self.fill_color)
+
+                    let px = self.pos.x * sz.x
+                    let in_fill = step(px, fill_w)
+                    return mix(sdf.result, sdf2.result, in_fill * sdf2.result.w)
+                }
+
+                return sdf.result
             }
         }
     }
@@ -27,12 +44,12 @@ script_mod! {
         width: Fill height: Fit
         padding: 12.
         draw_bg +: {
-            color: uniform(#EFF6FF)
-            border_radius: uniform(6.0)
+            color: #EFF6FF
+            border_radius: 6.0
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#1E40AF)
+                color: #1E40AF
                 text_style +: { font_size: 14. }
             }
             text: "Info alert message"
@@ -43,12 +60,12 @@ script_mod! {
         width: Fill height: Fit
         padding: 12.
         draw_bg +: {
-            color: uniform(#F0FDF4)
-            border_radius: uniform(6.0)
+            color: #F0FDF4
+            border_radius: 6.0
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#166534)
+                color: #166534
                 text_style +: { font_size: 14. }
             }
             text: "Success!"
@@ -59,12 +76,12 @@ script_mod! {
         width: Fill height: Fit
         padding: 12.
         draw_bg +: {
-            color: uniform(#FFFBEB)
-            border_radius: uniform(6.0)
+            color: #FFFBEB
+            border_radius: 6.0
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#924011)
+                color: #924011
                 text_style +: { font_size: 14. }
             }
             text: "Warning"
@@ -75,12 +92,12 @@ script_mod! {
         width: Fill height: Fit
         padding: 12.
         draw_bg +: {
-            color: uniform(#FEF2F2)
-            border_radius: uniform(6.0)
+            color: #FEF2F2
+            border_radius: 6.0
         }
         msg := Label{
             draw_text +: {
-                color: uniform(#991B1B)
+                color: #991B1B
                 text_style +: { font_size: 14. }
             }
             text: "Error"
@@ -90,39 +107,43 @@ script_mod! {
     mod.widgets.OxSkeleton = mod.widgets.RoundedView{
         width: Fill height: 16.
         draw_bg +: {
-            color: uniform(#F5F5F5)
-            border_radius: uniform(4.0)
+            color: #F5F5F5
+            border_radius: 4.0
         }
     }
 
     mod.widgets.OxSkeletonCircle = mod.widgets.RoundedView{
         width: 40. height: 40.
         draw_bg +: {
-            color: uniform(#F5F5F5)
-            border_radius: uniform(20.0)
+            color: #F5F5F5
+            border_radius: 20.0
         }
     }
 
     mod.widgets.OxSkeletonText = mod.widgets.RoundedView{
         width: Fill height: 12.
         draw_bg +: {
-            color: uniform(#F5F5F5)
-            border_radius: uniform(3.0)
+            color: #F5F5F5
+            border_radius: 3.0
         }
     }
 }
 
 pub fn apply_progress_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     let area = widget.area();
-    set_widget_draw_uniform(cx, area, live_id!(color), &v4(theme.colors.border_default));
-    let fill = widget.widget(cx, &[id!(fill)]);
-    let fill_area = fill.area();
     set_widget_draw_uniform(
         cx,
-        fill_area,
-        live_id!(color),
+        area,
+        live_id!(track_color),
+        &v4(theme.colors.border_default),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(fill_color),
         &v4(theme.colors.interactive_default),
     );
+    set_widget_draw_uniform(cx, area, live_id!(border_radius), &[theme.radius.sm as f32]);
     widget.redraw(cx);
 }
 

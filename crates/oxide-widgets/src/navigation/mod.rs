@@ -1,3 +1,8 @@
+/// Navigation widgets for OxideUI.
+///
+/// **Status: Planned** -- OxTabs, OxBreadcrumb, OxPagination, and OxStepper are layout
+/// placeholders with no interactive behavior. OxTab has a visual indicator but no selection
+/// logic. These will be implemented with proper state management in a future release.
 use makepad_widgets::*;
 use oxide_core::theme::Theme;
 
@@ -15,11 +20,10 @@ script_mod! {
     mod.widgets.OxTab = mod.widgets.View{
         width: Fit height: Fit
         flow: Down spacing: 0
-        cursor: Hand
         padding: Inset{left: 16., right: 16., top: 10., bottom: 0.}
         label := Label{
             draw_text +: {
-                color: uniform(#0A0A0A)
+                color: #0A0A0A
                 text_style +: { font_size: 14. }
             }
             text: "Tab"
@@ -28,8 +32,8 @@ script_mod! {
             width: Fill height: 2.
             margin: Inset{top: 8.}
             draw_bg +: {
-                color: uniform(#171717)
-                border_radius: uniform(1.0)
+                color: #171717
+                border_radius: 1.0
             }
         }
     }
@@ -42,7 +46,7 @@ script_mod! {
 
     mod.widgets.OxBreadcrumbSeparator = mod.widgets.Label{
         draw_text +: {
-            color: uniform(#A3A3A3)
+            color: #A3A3A3
             text_style +: { font_size: 14. }
         }
         text: "/"

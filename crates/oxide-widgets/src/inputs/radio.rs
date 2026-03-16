@@ -9,15 +9,11 @@ script_mod! {
 
     mod.widgets.OxRadio = mod.widgets.RadioButton{
         text: "Radio"
-        draw_radio: {
-            radio_type: Round
-            size: 8.0
-        }
         draw_bg +: {
-            color: uniform(#171717)
+            color: #171717
         }
         draw_text +: {
-            color: uniform(#0A0A0A)
+            color: #0A0A0A
             text_style +: { font_size: 14. }
         }
     }

@@ -1,13 +1,15 @@
 # OxideUI
 
-**A high-quality Rust component kit built on Makepad**
+**A Rust component kit built on Makepad, styled with the shadcn/ui design language**
 
 [![CI](https://github.com/CJHersh/OxideUI/actions/workflows/ci.yml/badge.svg)](https://github.com/CJHersh/OxideUI/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue.svg)
 [![Rust](https://img.shields.io/badge/rust-stable-orange.svg)](https://www.rust-lang.org/)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20Web%20%7C%20Android%20%7C%20iOS-lightgrey.svg)](https://github.com/makepad/makepad)
 
-OxideUI is a production-grade component library for Rust, styled with the [shadcn/ui](https://ui.shadcn.com/) design language and powered by [Makepad](https://github.com/makepad/makepad)'s GPU-accelerated rendering. Components render with pixel-perfect defaults out of the box -- no configuration needed.
+> **Status: Early development (v0.1.0)** -- Core components work with shadcn light theme defaults. Theme switching and many advanced widgets are in progress.
+
+OxideUI is a component library for Rust, styled with the [shadcn/ui](https://ui.shadcn.com/) design language and powered by [Makepad](https://github.com/makepad/makepad)'s GPU-accelerated rendering.
 
 ---
 
@@ -17,8 +19,8 @@ OxideUI is a production-grade component library for Rust, styled with the [shadc
 |---------|-------------|
 | **shadcn Design Language** | Components styled to match shadcn/ui -- Inter font, neutral palette, precise spacing and border radius from Figma design tokens. |
 | **Cross-Platform** | Native macOS, Windows, Linux, Android, iOS, and Web -- powered by Makepad. |
-| **GPU-Accelerated** | Built on Makepad's GPU rendering pipeline. SDF-based icons scale perfectly at any size. Hover, pressed, and focus states animate via shader uniforms. |
-| **Type-Safe Token Architecture** | Theme tokens are fully typed Rust structs: semantic colors, spacing, radius, typography, shadows, elevation, motion, opacity, and focus ring scales. Designed for future runtime theme switching. |
+| **GPU-Accelerated** | Built on Makepad's GPU rendering pipeline. Hover, pressed, and focus states on buttons animate via shader uniforms. |
+| **Type-Safe Token Architecture** | Theme tokens are fully typed Rust structs: semantic colors, spacing, radius, typography, shadows, elevation, motion, opacity, and focus ring scales. |
 | **Figma-First** | Design tokens sourced from Figma Variables. The Oxide CLI syncs tokens from Figma to JSON, with codegen to Rust structs planned. |
 
 ---
@@ -48,87 +50,32 @@ oxide-core = { git = "https://github.com/CJHersh/OxideUI", branch = "main" }
 makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "8b515338a2f50c5e0e2742cdc8b8ee7278aff371" }
 ```
 
-### Basic example
-
-OxideUI uses Makepad's `script_mod!` DSL for widget definitions. Components render with their built-in shadcn styling -- just use them:
-
-```rust
-use makepad_widgets::*;
-
-app_main!(App);
-
-script_mod! {
-    use mod.prelude.widgets.*
-    use mod.widgets.*
-
-    let app = startup() do #(App::script_component(vm)){
-        ui: Root{
-            main_window := Window{
-                body +: {
-                    View{
-                        flow: Down padding: 32 spacing: 16
-
-                        OxLabelTitle{ text: "Hello OxideUI" }
-
-                        OxCard{
-                            OxLabelCaption{ text: "A simple form" }
-                            OxTextInput{ empty_text: "Your name..." }
-                            View{
-                                flow: Right spacing: 8
-                                OxButton{ text: "Submit" }
-                                OxButtonSecondary{ text: "Cancel" }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    app
-}
-
-#[derive(Script, ScriptHook)]
-pub struct App {
-    #[live] ui: WidgetRef,
-}
-
-impl App {
-    fn run(vm: &mut ScriptVm) -> Self {
-        crate::makepad_widgets::script_mod(vm);
-        crate::oxide_widgets::script_mod(vm);
-        App::from_script_mod(vm, self::script_mod)
-    }
-}
-
-impl MatchEvent for App {
-    fn handle_startup(&mut self, _cx: &mut Cx) {}
-    fn handle_actions(&mut self, _cx: &mut Cx, _actions: &Actions) {}
-}
-
-impl AppMain for App {
-    fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
-        self.match_event(cx, event);
-        self.ui.handle_event(cx, event, &mut Scope::empty());
-    }
-}
-```
-
 ---
 
 ## Components
 
+### Available
+
+These components are functional with shadcn light theme styling baked into their DSL defaults. Button variants include full hover, pressed, focused, and disabled state support; other components inherit Makepad's default state handling.
+
 | Category | Components |
 |----------|------------|
-| **Buttons** | OxButton, OxButtonSecondary, OxButtonOutline, OxButtonGhost, OxButtonDanger, OxButtonSmall, OxButtonLarge, OxIconButton, OxButtonGroup, OxToggleButton |
+| **Buttons** | OxButton, OxButtonSecondary, OxButtonOutline, OxButtonGhost, OxButtonDanger, OxButtonSmall, OxButtonLarge, OxIconButton, OxToggleButton |
 | **Inputs** | OxTextInput, OxTextArea, OxCheckbox, OxRadio, OxSwitch, OxSlider |
 | **Display** | OxLabel (Title, Subtitle, Body, Caption, Secondary, Link), OxBadge (Success, Warning, Error, Info), OxAvatar (Small, Large, XLarge), OxIcon |
-| **Layout** | OxCard, OxDivider, OxStack, OxGrid |
+| **Layout** | OxCard, OxDivider |
 | **Feedback** | OxAlert (Success, Warning, Error), OxProgress, OxSkeleton, OxSkeletonCircle, OxSkeletonText |
+
+### Planned
+
+These components exist as layout placeholders in the codebase but do not yet have interactive behavior or full styling.
+
+| Category | Components |
+|----------|------------|
+| **Layout** | OxStack, OxGrid, OxButtonGroup |
 | **Navigation** | OxTabs, OxTab, OxBreadcrumb, OxBreadcrumbSeparator, OxPagination, OxStepper |
 | **Overlay** | OxTooltip, OxPopover, OxDrawer, OxMenu, OxMenuItem |
 | **Data** | OxTable, OxTableRow, OxTableHeader, OxList, OxListItem, OxTimeline |
-
-All interactive components support **default**, **hover**, **pressed**, **focused**, and **disabled** states via GPU shader uniforms.
 
 ---
 
@@ -147,9 +94,9 @@ Components are styled using a structured token system based on shadcn/ui:
 
 All token values are defined as typed Rust structs in `oxide-core` and sourced from `figma/tokens.json`. DSL defaults in each component bake in the shadcn light values directly.
 
-### Theming architecture (planned)
+### Theming architecture (in progress)
 
-The codebase includes a full theming infrastructure designed for future runtime theme switching:
+The codebase includes theming infrastructure designed for runtime theme switching:
 
 - **`ThemeEngine`** -- global atomic theme switching with signal-based notifications
 - **`Theme` struct** -- contains all token scales for a complete theme
@@ -183,6 +130,7 @@ cargo run -p oxide-custom-theme
 - **Component polish** -- pixel-perfect shadcn styling across all components
 - **Dark mode** -- dark theme tokens are defined; pending Makepad API support for full text color switching
 - **Runtime theme switching** -- ThemeEngine infrastructure is built; waiting on `draw_text` access through `WidgetRef`
+- **Implement planned components** -- navigation, overlay, and data display widgets
 - **Brand themes** -- OpenAI, Airbnb, Notion theme definitions exist in `oxide-core`, ready to activate
 - **Figma codegen** -- `oxide generate` to produce Theme structs from `figma/tokens.json`
 
@@ -202,9 +150,9 @@ OxideUI/
 │   │       ├── display/        # OxLabel, OxAvatar, OxBadge, OxIcon
 │   │       ├── layout/         # OxCard, OxDivider, OxStack, OxGrid
 │   │       ├── feedback/       # OxAlert, OxProgress, OxSkeleton
-│   │       ├── navigation/     # OxTabs, OxBreadcrumb, OxPagination
-│   │       ├── overlay/        # OxTooltip, OxPopover, OxDrawer, OxMenu
-│   │       └── data/           # OxTable, OxList, OxTimeline
+│   │       ├── navigation/     # OxTabs, OxBreadcrumb, OxPagination [planned]
+│   │       ├── overlay/        # OxTooltip, OxPopover, OxDrawer, OxMenu [planned]
+│   │       └── data/           # OxTable, OxList, OxTimeline [planned]
 │   └── oxide-cli/          # Figma sync, codegen, scaffolding
 ├── examples/
 │   ├── showcase/            # Component gallery with section navigation

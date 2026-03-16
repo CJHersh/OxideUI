@@ -17,7 +17,7 @@ pub use badge::{
     apply_badge_error_theme, apply_badge_info_theme, apply_badge_success_theme, apply_badge_theme,
     apply_badge_warning_theme,
 };
-pub use icon::{apply_icon_accent_theme, apply_icon_secondary_theme, apply_icon_theme, icons};
+pub use icon::{apply_icon_accent_theme, apply_icon_secondary_theme, apply_icon_theme};
 pub use label::{
     apply_label_body_theme, apply_label_caption_theme, apply_label_link_theme,
     apply_label_secondary_theme, apply_label_subtitle_theme, apply_label_theme,

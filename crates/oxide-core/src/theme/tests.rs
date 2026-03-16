@@ -441,3 +441,68 @@ fn brand_dark_themes_compile() {
     assert_eq!(airbnb_dark_theme().mode, ThemeMode::Dark);
     assert_eq!(notion_dark_theme().mode, ThemeMode::Dark);
 }
+
+// ── Token drift detection ────────────────────────────────────────
+//
+// This test verifies that the shadcn light theme token values match
+// the hex values hardcoded in widget DSL definitions. If you change
+// a color in shadcn.rs, update the corresponding widget DSL default
+// and this test.
+
+fn assert_color_eq(actual: Vec4, hex: &str, label: &str) {
+    let expected = hex_to_vec4(hex);
+    assert!(
+        (actual.x - expected.x).abs() < 1e-4
+            && (actual.y - expected.y).abs() < 1e-4
+            && (actual.z - expected.z).abs() < 1e-4
+            && (actual.w - expected.w).abs() < 1e-4,
+        "Token drift detected for {}: expected {} ({:?}), got {:?}",
+        label,
+        hex,
+        expected,
+        actual
+    );
+}
+
+#[test]
+fn token_drift_detection_shadcn_colors() {
+    let t = shadcn_theme();
+    let c = &t.colors;
+
+    assert_color_eq(c.surface_primary, "#FFFFFF", "surface_primary");
+    assert_color_eq(c.surface_secondary, "#F5F5F5", "surface_secondary");
+    assert_color_eq(c.surface_inverse, "#171717", "surface_inverse");
+    assert_color_eq(c.text_primary, "#0A0A0A", "text_primary");
+    assert_color_eq(c.text_secondary, "#737373", "text_secondary");
+    assert_color_eq(c.text_tertiary, "#404040", "text_tertiary");
+    assert_color_eq(c.text_disabled, "#A3A3A3", "text_disabled");
+    assert_color_eq(c.text_inverse, "#FAFAFA", "text_inverse");
+    assert_color_eq(c.interactive_default, "#171717", "interactive_default");
+    assert_color_eq(c.interactive_hover, "#404040", "interactive_hover");
+    assert_color_eq(c.interactive_pressed, "#525252", "interactive_pressed");
+    assert_color_eq(c.interactive_disabled, "#D4D4D4", "interactive_disabled");
+    assert_color_eq(c.border_default, "#E5E5E5", "border_default");
+    assert_color_eq(c.border_hover, "#D4D4D4", "border_hover");
+    assert_color_eq(c.border_error, "#EF4444", "border_error");
+    assert_color_eq(c.feedback_success, "#16A34A", "feedback_success");
+    assert_color_eq(c.feedback_warning, "#F59E0B", "feedback_warning");
+    assert_color_eq(c.feedback_error, "#DC2626", "feedback_error");
+    assert_color_eq(c.feedback_info, "#3B82F6", "feedback_info");
+}
+
+#[test]
+fn token_drift_detection_shadcn_radius() {
+    let t = shadcn_theme();
+    assert_eq!(t.radius.sm, 4.0, "radius.sm drift");
+    assert_eq!(t.radius.md, 6.0, "radius.md drift");
+    assert_eq!(t.radius.lg, 8.0, "radius.lg drift");
+}
+
+#[test]
+fn all_themes_have_unique_names() {
+    let themes = all_themes();
+    let mut names: Vec<&str> = themes.iter().map(|t| t.name).collect();
+    names.sort();
+    names.dedup();
+    assert_eq!(names.len(), themes.len(), "Duplicate theme names detected");
+}

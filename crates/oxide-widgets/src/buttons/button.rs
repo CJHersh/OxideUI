@@ -1,3 +1,8 @@
+/// OxButton variants styled with the shadcn/ui design language.
+///
+/// Default hex values below match the shadcn light theme from
+/// `oxide_core::theme::themes::shadcn`. The `apply_*_theme` functions
+/// override these at runtime for theme switching.
 use makepad_widgets::*;
 use oxide_core::theme::Theme;
 
@@ -12,40 +17,25 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{top: 8., right: 16., bottom: 8., left: 16.}
         draw_bg +: {
-            color: uniform(#171717)
-            color_hover: uniform(#404040)
-            color_down: uniform(#525252)
-            color_focus: uniform(#171717)
-            color_disabled: uniform(#D4D4D4)
-            border_size: uniform(0.0)
-            border_radius: uniform(6.0)
-            border_color: uniform(#00000000)
-            border_color_hover: uniform(#00000000)
-            border_color_down: uniform(#00000000)
-            border_color_focus: uniform(#00000000)
-            border_color_disabled: uniform(#00000000)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let r = self.border_radius;
-
-                sdf.box(0.5, 0.5, self.rect_size.x - 1.0, self.rect_size.y - 1.0, r);
-
-                let c1 = mix(self.color, self.color_focus, self.focus);
-                let c2 = mix(c1, self.color_hover, self.hover);
-                let c3 = mix(c2, self.color_down, self.down);
-                let col = mix(c3, self.color_disabled, self.disabled);
-
-                sdf.fill(col);
-                return sdf.result;
-            }
+            color: #171717
+            color_hover: #404040
+            color_down: #525252
+            color_focus: #171717
+            color_disabled: #D4D4D4
+            border_size: 0.0
+            border_radius: 6.0
+            border_color: #00000000
+            border_color_hover: #00000000
+            border_color_down: #00000000
+            border_color_focus: #00000000
+            border_color_disabled: #00000000
         }
         draw_text +: {
-            color: uniform(#FAFAFA)
-            color_hover: uniform(#FAFAFA)
-            color_down: uniform(#FAFAFAEE)
-            color_focus: uniform(#FAFAFA)
-            color_disabled: uniform(#FAFAFA80)
+            color: #FAFAFA
+            color_hover: #FAFAFA
+            color_down: #FAFAFAEE
+            color_focus: #FAFAFA
+            color_disabled: #FAFAFA80
             text_style +: { font_size: 14. }
         }
     }
@@ -55,51 +45,25 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{top: 8., right: 16., bottom: 8., left: 16.}
         draw_bg +: {
-            color: uniform(#F5F5F5)
-            color_hover: uniform(#FAFAFA)
-            color_down: uniform(#E5E5E5)
-            color_focus: uniform(#F5F5F5)
-            color_disabled: uniform(#FAFAFA)
-            border_size: uniform(1.0)
-            border_radius: uniform(6.0)
-            border_color: uniform(#E5E5E5)
-            border_color_hover: uniform(#D4D4D4)
-            border_color_down: uniform(#D4D4D4)
-            border_color_focus: uniform(#D4D4D480)
-            border_color_disabled: uniform(#E5E5E5)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let r = self.border_radius;
-                let bs = self.border_size;
-
-                sdf.box(bs, bs, self.rect_size.x - bs * 2.0, self.rect_size.y - bs * 2.0, max(0.0, r - bs));
-
-                let c1 = mix(self.color, self.color_focus, self.focus);
-                let c2 = mix(c1, self.color_hover, self.hover);
-                let c3 = mix(c2, self.color_down, self.down);
-                let col = mix(c3, self.color_disabled, self.disabled);
-
-                sdf.fill(col);
-
-                sdf.box(0.5, 0.5, self.rect_size.x - 1.0, self.rect_size.y - 1.0, r);
-
-                let bc1 = mix(self.border_color, self.border_color_focus, self.focus);
-                let bc2 = mix(bc1, self.border_color_hover, self.hover);
-                let bc3 = mix(bc2, self.border_color_down, self.down);
-                let bcol = mix(bc3, self.border_color_disabled, self.disabled);
-
-                sdf.stroke(bcol, bs);
-
-                return sdf.result;
-            }
+            color: #F5F5F5
+            color_hover: #FAFAFA
+            color_down: #E5E5E5
+            color_focus: #F5F5F5
+            color_disabled: #FAFAFA
+            border_size: 1.0
+            border_radius: 6.0
+            border_color: #E5E5E5
+            border_color_hover: #D4D4D4
+            border_color_down: #D4D4D4
+            border_color_focus: #D4D4D480
+            border_color_disabled: #E5E5E5
         }
         draw_text +: {
-            color: uniform(#171717)
-            color_hover: uniform(#0A0A0A)
-            color_down: uniform(#0A0A0A)
-            color_focus: uniform(#171717)
-            color_disabled: uniform(#A3A3A3)
+            color: #171717
+            color_hover: #0A0A0A
+            color_down: #0A0A0A
+            color_focus: #171717
+            color_disabled: #A3A3A3
             text_style +: { font_size: 14. }
         }
     }
@@ -109,38 +73,25 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{top: 8., right: 16., bottom: 8., left: 16.}
         draw_bg +: {
-            color: uniform(#FFFFFF00)
-            color_hover: uniform(#0000000D)
-            color_down: uniform(#00000014)
-            color_focus: uniform(#FFFFFF00)
-            color_disabled: uniform(#FFFFFF00)
-            border_size: uniform(0.0)
-            border_radius: uniform(6.0)
-            border_color: uniform(#00000000)
-            border_color_hover: uniform(#00000000)
-            border_color_down: uniform(#00000000)
-            border_color_focus: uniform(#00000000)
-            border_color_disabled: uniform(#00000000)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0.0, 0.0, self.rect_size.x, self.rect_size.y, self.border_radius);
-
-                let c1 = mix(self.color, self.color_focus, self.focus);
-                let c2 = mix(c1, self.color_hover, self.hover);
-                let c3 = mix(c2, self.color_down, self.down);
-                let col = mix(c3, self.color_disabled, self.disabled);
-
-                sdf.fill(col);
-                return sdf.result;
-            }
+            color: #FFFFFF00
+            color_hover: #0000000D
+            color_down: #00000014
+            color_focus: #FFFFFF00
+            color_disabled: #FFFFFF00
+            border_size: 0.0
+            border_radius: 6.0
+            border_color: #00000000
+            border_color_hover: #00000000
+            border_color_down: #00000000
+            border_color_focus: #00000000
+            border_color_disabled: #00000000
         }
         draw_text +: {
-            color: uniform(#404040)
-            color_hover: uniform(#171717)
-            color_down: uniform(#0A0A0A)
-            color_focus: uniform(#404040)
-            color_disabled: uniform(#40404060)
+            color: #404040
+            color_hover: #171717
+            color_down: #0A0A0A
+            color_focus: #404040
+            color_disabled: #40404060
             text_style +: { font_size: 14. }
         }
     }
@@ -150,40 +101,25 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{top: 8., right: 16., bottom: 8., left: 16.}
         draw_bg +: {
-            color: uniform(#DC2626)
-            color_hover: uniform(#B91C1C)
-            color_down: uniform(#991B1B)
-            color_focus: uniform(#DC2626)
-            color_disabled: uniform(#FCA5A5)
-            border_size: uniform(0.0)
-            border_radius: uniform(6.0)
-            border_color: uniform(#00000000)
-            border_color_hover: uniform(#00000000)
-            border_color_down: uniform(#00000000)
-            border_color_focus: uniform(#00000000)
-            border_color_disabled: uniform(#00000000)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let r = self.border_radius;
-
-                sdf.box(0.5, 0.5, self.rect_size.x - 1.0, self.rect_size.y - 1.0, r);
-
-                let c1 = mix(self.color, self.color_focus, self.focus);
-                let c2 = mix(c1, self.color_hover, self.hover);
-                let c3 = mix(c2, self.color_down, self.down);
-                let col = mix(c3, self.color_disabled, self.disabled);
-
-                sdf.fill(col);
-                return sdf.result;
-            }
+            color: #DC2626
+            color_hover: #B91C1C
+            color_down: #991B1B
+            color_focus: #DC2626
+            color_disabled: #FCA5A5
+            border_size: 0.0
+            border_radius: 6.0
+            border_color: #00000000
+            border_color_hover: #00000000
+            border_color_down: #00000000
+            border_color_focus: #00000000
+            border_color_disabled: #00000000
         }
         draw_text +: {
-            color: uniform(#FFFFFF)
-            color_hover: uniform(#FFFFFF)
-            color_down: uniform(#FFFFFFEE)
-            color_focus: uniform(#FFFFFF)
-            color_disabled: uniform(#FFFFFF80)
+            color: #FFFFFF
+            color_hover: #FFFFFF
+            color_down: #FFFFFFEE
+            color_focus: #FFFFFF
+            color_disabled: #FFFFFF80
             text_style +: { font_size: 14. }
         }
     }
@@ -193,51 +129,25 @@ script_mod! {
         width: Fit height: Fit
         padding: Inset{top: 8., right: 16., bottom: 8., left: 16.}
         draw_bg +: {
-            color: uniform(#FFFFFF00)
-            color_hover: uniform(#0000000D)
-            color_down: uniform(#00000014)
-            color_focus: uniform(#FFFFFF00)
-            color_disabled: uniform(#FFFFFF00)
-            border_size: uniform(1.0)
-            border_radius: uniform(6.0)
-            border_color: uniform(#E5E5E5)
-            border_color_hover: uniform(#D4D4D4)
-            border_color_down: uniform(#D4D4D4)
-            border_color_focus: uniform(#D4D4D480)
-            border_color_disabled: uniform(#E5E5E580)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let r = self.border_radius;
-                let bs = self.border_size;
-
-                sdf.box(bs, bs, self.rect_size.x - bs * 2.0, self.rect_size.y - bs * 2.0, max(0.0, r - bs));
-
-                let c1 = mix(self.color, self.color_focus, self.focus);
-                let c2 = mix(c1, self.color_hover, self.hover);
-                let c3 = mix(c2, self.color_down, self.down);
-                let col = mix(c3, self.color_disabled, self.disabled);
-
-                sdf.fill(col);
-
-                sdf.box(0.5, 0.5, self.rect_size.x - 1.0, self.rect_size.y - 1.0, r);
-
-                let bc1 = mix(self.border_color, self.border_color_focus, self.focus);
-                let bc2 = mix(bc1, self.border_color_hover, self.hover);
-                let bc3 = mix(bc2, self.border_color_down, self.down);
-                let bcol = mix(bc3, self.border_color_disabled, self.disabled);
-
-                sdf.stroke(bcol, bs);
-
-                return sdf.result;
-            }
+            color: #FFFFFF00
+            color_hover: #0000000D
+            color_down: #00000014
+            color_focus: #FFFFFF00
+            color_disabled: #FFFFFF00
+            border_size: 1.0
+            border_radius: 6.0
+            border_color: #E5E5E5
+            border_color_hover: #D4D4D4
+            border_color_down: #D4D4D4
+            border_color_focus: #D4D4D480
+            border_color_disabled: #E5E5E580
         }
         draw_text +: {
-            color: uniform(#0A0A0A)
-            color_hover: uniform(#171717)
-            color_down: uniform(#171717)
-            color_focus: uniform(#0A0A0A)
-            color_disabled: uniform(#A3A3A3)
+            color: #0A0A0A
+            color_hover: #171717
+            color_down: #171717
+            color_focus: #0A0A0A
+            color_disabled: #A3A3A3
             text_style +: { font_size: 14. }
         }
     }
@@ -245,13 +155,51 @@ script_mod! {
     mod.widgets.OxButtonSmall = mod.widgets.OxButton{
         padding: Inset{top: 6., right: 12., bottom: 6., left: 12.}
         draw_text +: { text_style +: { font_size: 14. } }
-        draw_bg +: { border_radius: uniform(6.0) }
+        draw_bg +: { border_radius: 6.0 }
     }
 
     mod.widgets.OxButtonLarge = mod.widgets.OxButton{
         padding: Inset{top: 8., right: 32., bottom: 8., left: 32.}
         draw_text +: { text_style +: { font_size: 14. } }
-        draw_bg +: { border_radius: uniform(6.0) }
+        draw_bg +: { border_radius: 6.0 }
+    }
+
+    mod.widgets.OxNavButtonActive = mod.widgets.Button{
+        width: Fill height: Fit
+        padding: Inset{top: 8., right: 12., bottom: 8., left: 12.}
+        draw_bg +: {
+            color: #EAEAEA
+            color_hover: #E0E0E0
+            color_down: #D6D6D6
+            color_focus: #EAEAEA
+            border_radius: 6.0
+        }
+        draw_text +: {
+            color: #0A0A0A
+            color_hover: #0A0A0A
+            color_down: #0A0A0A
+            color_focus: #0A0A0A
+            text_style +: { font_size: 13. }
+        }
+    }
+
+    mod.widgets.OxNavButtonInactive = mod.widgets.Button{
+        width: Fill height: Fit
+        padding: Inset{top: 8., right: 12., bottom: 8., left: 12.}
+        draw_bg +: {
+            color: #FFFFFF00
+            color_hover: #F0F0F0
+            color_down: #EBEBEB
+            color_focus: #FFFFFF00
+            border_radius: 6.0
+        }
+        draw_text +: {
+            color: #737373
+            color_hover: #525252
+            color_down: #404040
+            color_focus: #737373
+            text_style +: { font_size: 13. }
+        }
     }
 }
 

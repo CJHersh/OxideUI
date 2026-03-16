@@ -1,3 +1,8 @@
+/// OxTextArea renders a multiline text input with shadcn styling.
+///
+/// Default values below match the shadcn light theme from
+/// `oxide_core::theme::themes::shadcn`. The `apply_text_area_theme` function
+/// overrides these at runtime for theme switching.
 use makepad_widgets::*;
 use oxide_core::theme::Theme;
 
@@ -12,14 +17,15 @@ script_mod! {
         is_multiline: true
         empty_text: "Type here..."
         draw_bg +: {
-            border_radius: uniform(6.0)
-            border_size: uniform(1.0)
-            border_color: uniform(#E5E5E5)
-            border_color_focus: uniform(#D4D4D4)
-            color: uniform(#FFFFFF)
+            border_radius: 6.0
+            border_size: 1.0
+            border_color: #E5E5E5
+            border_color_focus: #D4D4D4
+            border_color_error: uniform(#EF4444)
+            color: #FFFFFF
         }
         draw_text +: {
-            color: uniform(#0A0A0A)
+            color: #0A0A0A
             text_style +: { font_size: 14. }
         }
     }
@@ -40,6 +46,12 @@ pub fn apply_text_area_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
         area,
         live_id!(border_color_focus),
         &v4(theme.colors.border_focus),
+    );
+    set_widget_draw_uniform(
+        cx,
+        area,
+        live_id!(border_color_error),
+        &v4(theme.colors.border_error),
     );
     widget.redraw(cx);
 }

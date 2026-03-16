@@ -1,5 +1,7 @@
 # OxideUI Project Plan
 
+> **Note:** This document describes the long-term vision for OxideUI. The current implementation uses Makepad's `script_mod!` DSL for widget definitions rather than the Rust builder APIs shown in some sections below. See the [README](README.md) for the current state of the project.
+
 ## 1. Vision & Goals
 
 ### Mission Statement
@@ -103,10 +105,13 @@ OxideUI is the industry's first **Multi-Skin Rust component library**. Build onc
 ## 4. Full Project Directory Tree
 
 ```
-oxide-ui/
+OxideUI/
 ├── Cargo.toml                    # workspace manifest
 ├── README.md
 ├── PROJECT_PLAN.md
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── CHANGELOG.md
 ├── LICENSE-MIT
 ├── LICENSE-APACHE
 │
@@ -115,84 +120,78 @@ oxide-ui/
 │   │   ├── Cargo.toml
 │   │   └── src/
 │   │       ├── lib.rs
-│   │       ├── theme.rs
-│   │       ├── tokens/
-│   │       │   ├── mod.rs
-│   │       │   ├── colors.rs
-│   │       │   ├── spacing.rs
-│   │       │   ├── radius.rs
-│   │       │   ├── typography.rs
-│   │       │   └── shadows.rs
-│   │       └── engine.rs
+│   │       └── theme/
+│   │           ├── mod.rs
+│   │           ├── tokens.rs         # Theme, SemanticColors, all token scales
+│   │           ├── engine.rs         # ThemeEngine, ThemeChangedAction
+│   │           ├── tests.rs
+│   │           └── themes/
+│   │               ├── mod.rs
+│   │               ├── shadcn.rs     # shadcn light + dark
+│   │               ├── openai.rs
+│   │               ├── airbnb.rs
+│   │               └── notion.rs
 │   │
 │   ├── oxide-widgets/
 │   │   ├── Cargo.toml
 │   │   └── src/
 │   │       ├── lib.rs
-│   │       ├── prelude.rs
-│   │       ├── button/
+│   │       ├── theme_apply.rs        # ThemeMap, set_widget_draw_uniform
+│   │       ├── buttons/
 │   │       │   ├── mod.rs
-│   │       │   ├── ox_button.rs
-│   │       │   ├── ox_icon_button.rs
-│   │       │   ├── ox_button_group.rs
-│   │       │   └── ox_toggle_button.rs
-│   │       ├── input/
+│   │       │   ├── button.rs         # OxButton + 6 variants
+│   │       │   ├── icon_button.rs
+│   │       │   ├── button_group.rs   # [planned]
+│   │       │   └── toggle_button.rs
+│   │       ├── inputs/
 │   │       │   ├── mod.rs
-│   │       │   ├── ox_text_input.rs
-│   │       │   ├── ox_text_area.rs
-│   │       │   ├── ox_checkbox.rs
-│   │       │   ├── ox_radio.rs
-│   │       │   ├── ox_switch.rs
-│   │       │   └── ox_slider.rs
-│   │       └── display/
-│   │           ├── mod.rs
-│   │           ├── ox_label.rs
-│   │           ├── ox_badge.rs
-│   │           ├── ox_avatar.rs
-│   │           └── ox_icon.rs
+│   │       │   ├── text_input.rs
+│   │       │   ├── text_area.rs
+│   │       │   ├── checkbox.rs
+│   │       │   ├── radio.rs
+│   │       │   ├── switch.rs
+│   │       │   └── slider.rs
+│   │       ├── display/
+│   │       │   ├── mod.rs
+│   │       │   ├── label.rs          # OxLabel + 6 variants
+│   │       │   ├── badge.rs          # OxBadge + 4 variants
+│   │       │   ├── avatar.rs         # OxAvatar + 3 size variants
+│   │       │   └── icon.rs
+│   │       ├── layout/
+│   │       │   └── mod.rs            # OxCard, OxDivider, OxStack [planned], OxGrid [planned]
+│   │       ├── feedback/
+│   │       │   └── mod.rs            # OxAlert variants, OxProgress, OxSkeleton variants
+│   │       ├── navigation/
+│   │       │   └── mod.rs            # [planned] OxTabs, OxBreadcrumb, OxPagination, OxStepper
+│   │       ├── overlay/
+│   │       │   └── mod.rs            # [planned] OxTooltip, OxPopover, OxDrawer, OxMenu
+│   │       └── data/
+│   │           └── mod.rs            # [planned] OxTable, OxList, OxTimeline
 │   │
 │   └── oxide-cli/
 │       ├── Cargo.toml
 │       └── src/
 │           ├── main.rs
+│           ├── codegen/
 │           ├── commands/
-│           │   ├── mod.rs
-│           │   ├── init.rs
-│           │   ├── sync.rs
-│           │   ├── generate.rs
-│           │   ├── watch.rs
-│           │   ├── validate.rs
-│           │   ├── themes.rs
-│           │   └── new.rs
-│           └── config.rs
+│           ├── figma/
+│           └── parser/
 │
 ├── examples/
-│   ├── showcase/
-│   │   ├── Cargo.toml
-│   │   └── src/
-│   │       └── main.rs
-│   ├── theme-switcher/
-│   │   ├── Cargo.toml
-│   │   └── src/
-│   │       └── main.rs
-│   └── custom-theme/
-│       ├── Cargo.toml
-│       └── src/
-│           └── main.rs
+│   ├── showcase/                     # Component gallery with section navigation
+│   ├── theme-switcher/               # Static component demo
+│   └── custom-theme/                 # ThemeEngine API example
 │
 ├── docs/
 │   ├── getting-started.md
 │   ├── theming.md
-│   ├── components.md
 │   ├── figma-workflow.md
-│   └── api/
-│       └── (generated docs)
+│   └── components/
+│       └── button.md
 │
 └── figma/
-    ├── oxide-design-tokens.fig
-    ├── variables.json           # exported Figma variables
-    └── components/
-        └── (Figma component definitions)
+    ├── tokens.json                   # Design tokens for all themes
+    └── tokens.schema.json            # JSON Schema for token files
 ```
 
 ---
@@ -206,152 +205,76 @@ oxide-ui/
 
 Semantic tokens reference primitives; themes swap primitives to achieve different looks.
 
-### Rust Struct Definitions
+### Rust Struct Definitions (as implemented)
 
 ```rust
-// oxide-core/src/theme.rs
+// oxide-core/src/theme/tokens.rs
 
-/// A complete theme definition with all token scales.
-#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Theme {
-    pub id: String,
-    pub name: String,
-    pub semantic_colors: SemanticColors,
+    pub name: &'static str,
+    pub mode: ThemeMode,
+    pub colors: SemanticColors,
     pub spacing: SpacingScale,
     pub radius: RadiusScale,
     pub typography: TypographyScale,
     pub shadows: ShadowScale,
+    pub elevation: ElevationScale,
+    pub motion: MotionScale,
+    pub opacity: OpacityScale,
+    pub focus_ring: FocusRingTokens,
 }
 
-/// Semantic color mappings (Layer 2).
-#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SemanticColors {
-    pub background: BackgroundColors,
-    pub surface: SurfaceColors,
-    pub text: TextColors,
-    pub border: BorderColors,
-    pub accent: AccentColors,
-    pub feedback: FeedbackColors,
+    // Surfaces
+    pub surface_primary: Vec4,
+    pub surface_secondary: Vec4,
+    pub surface_tertiary: Vec4,
+    pub surface_inverse: Vec4,
+    // Text
+    pub text_primary: Vec4,
+    pub text_secondary: Vec4,
+    pub text_tertiary: Vec4,
+    pub text_disabled: Vec4,
+    pub text_inverse: Vec4,
+    pub text_link: Vec4,
+    // Interactive
+    pub interactive_default: Vec4,
+    pub interactive_hover: Vec4,
+    pub interactive_pressed: Vec4,
+    pub interactive_disabled: Vec4,
+    // Borders
+    pub border_default: Vec4,
+    pub border_hover: Vec4,
+    pub border_focus: Vec4,
+    pub border_error: Vec4,
+    // Feedback
+    pub feedback_success: Vec4,
+    pub feedback_warning: Vec4,
+    pub feedback_error: Vec4,
+    pub feedback_info: Vec4,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct BackgroundColors {
-    pub primary: [f32; 4],
-    pub secondary: [f32; 4],
-    pub tertiary: [f32; 4],
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct SurfaceColors {
-    pub raised: [f32; 4],
-    pub overlay: [f32; 4],
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TextColors {
-    pub primary: [f32; 4],
-    pub secondary: [f32; 4],
-    pub tertiary: [f32; 4],
-    pub inverse: [f32; 4],
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct BorderColors {
-    pub default: [f32; 4],
-    pub strong: [f32; 4],
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct AccentColors {
-    pub primary: [f32; 4],
-    pub primary_hover: [f32; 4],
-    pub primary_pressed: [f32; 4],
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct FeedbackColors {
-    pub success: [f32; 4],
-    pub warning: [f32; 4],
-    pub error: [f32; 4],
-    pub info: [f32; 4],
-}
-
-/// Spacing scale (4px base).
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct SpacingScale {
-    pub xs: f32,   // 4
-    pub sm: f32,   // 8
-    pub md: f32,   // 16
-    pub lg: f32,   // 24
-    pub xl: f32,   // 32
-    pub xxl: f32,  // 48
-}
-
-/// Border radius scale.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct RadiusScale {
-    pub none: f32,
-    pub sm: f32,
-    pub md: f32,
-    pub lg: f32,
-    pub full: f32,
-}
-
-/// Typography scale.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TypographyScale {
-    pub font_family: String,
-    pub title_lg: TypographyToken,
-    pub title_md: TypographyToken,
-    pub title_sm: TypographyToken,
-    pub body_lg: TypographyToken,
-    pub body_md: TypographyToken,
-    pub body_sm: TypographyToken,
-    pub caption: TypographyToken,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TypographyToken {
-    pub size: f32,
-    pub weight: u16,
-    pub line_height: f32,
-}
-
-/// Shadow scale.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ShadowScale {
-    pub none: Shadow,
-    pub sm: Shadow,
-    pub md: Shadow,
-    pub lg: Shadow,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Shadow {
-    pub offset_x: f32,
-    pub offset_y: f32,
-    pub blur: f32,
-    pub spread: f32,
-    pub color: [f32; 4],
-}
+pub struct SpacingScale { pub none: f64, pub xs: f64, pub sm: f64, pub md: f64, pub lg: f64, pub xl: f64, pub xxl: f64 }
+pub struct RadiusScale  { pub none: f64, pub xs: f64, pub sm: f64, pub md: f64, pub lg: f64, pub xl: f64, pub full: f64 }
 ```
 
-### ThemeEngine Design (Atomic Switching)
+### ThemeEngine Design (as implemented)
 
 ```rust
-// oxide-core/src/engine.rs
+// oxide-core/src/theme/engine.rs
 
-/// Global theme engine. Switching is atomic—all components
-/// read the new theme on next frame; no partial updates.
-pub struct ThemeEngine {
-    current: Arc<RwLock<Theme>>,
-    available: HashMap<String, Theme>,
-}
+/// Global theme engine backed by static storage. Switching is atomic.
+pub struct ThemeEngine;
 
 impl ThemeEngine {
-    pub fn switch(&self, theme_id: &str) -> Result<(), ThemeError>;
-    pub fn current(&self) -> Theme;
-    pub fn register(&mut self, theme: Theme);
+    pub fn init(themes: Vec<Theme>);
+    pub fn current() -> Theme;
+    pub fn switch(index: usize);
+    pub fn switch_by_name(name: &str) -> bool;
+    pub fn next_theme();
+    pub fn prev_theme();
+    pub fn switch_and_signal(cx: &mut Cx, index: usize);
+    // ... _and_signal variants post ThemeChangedAction
 }
 ```
 
@@ -359,14 +282,16 @@ impl ThemeEngine {
 
 ## 6. Component Specifications (Tier 1)
 
+> Components are defined as `script_mod!` DSL aliases over Makepad base widgets. They are used directly in DSL markup rather than via Rust builder APIs.
+
 ### Buttons
 
-| Component       | Variants                                      | Sizes          | States                          | API Summary                          |
+| Component       | Variants                                      | Sizes          | States                          | DSL Usage                          |
 |----------------|-----------------------------------------------|----------------|----------------------------------|--------------------------------------|
-| **OxButton**   | Primary, Secondary, Ghost, Danger             | Small, Medium, Large | default, hover, pressed, focused, disabled | `OxButton::new(cx, "Label")`         |
-| **OxIconButton** | Primary, Secondary, Ghost, Danger           | Small, Medium, Large | default, hover, pressed, focused, disabled | `OxIconButton::new(cx, icon_id)`     |
-| **OxButtonGroup** | Horizontal, Vertical                        | inherits       | —                                | `OxButtonGroup::new(cx).add(...)`    |
-| **OxToggleButton** | Single, Group                               | Small, Medium, Large | default, selected, hover, pressed | `OxToggleButton::new(cx, selected)`  |
+| **OxButton**   | Primary, Secondary, Ghost, Danger, Outline    | Small, Medium, Large | default, hover, pressed, focused, disabled | `OxButton{ text: "Label" }`         |
+| **OxIconButton** | —                                           | 40x40          | default, hover, pressed          | `OxIconButton{}`                     |
+| **OxButtonGroup** | [planned]                                  | inherits       | —                                | `OxButtonGroup{ ... }`               |
+| **OxToggleButton** | —                                          | —              | default, selected, hover, pressed | `OxToggleButton{ text: "Toggle" }`   |
 
 **States:** `default` | `hover` | `pressed` | `focused` | `disabled`
 
@@ -374,29 +299,25 @@ impl ThemeEngine {
 
 ### Inputs
 
-| Component      | Variants | States                          | API Summary                          |
+| Component      | Variants | States                          | DSL Usage                          |
 |----------------|----------|----------------------------------|--------------------------------------|
-| **OxTextInput** | Single-line, with label, with hint | default, hover, focused, disabled, error | `OxTextInput::new(cx).placeholder("...")` |
-| **OxTextArea** | Resizable, fixed height           | default, hover, focused, disabled, error | `OxTextArea::new(cx).rows(4)`        |
-| **OxCheckbox** | Checked, Unchecked, Indeterminate | default, hover, pressed, focused, disabled | `OxCheckbox::new(cx, checked)`       |
-| **OxRadio**    | Selected, Unselected             | default, hover, pressed, focused, disabled | `OxRadio::new(cx, selected, group)` |
-| **OxSwitch**   | On, Off                           | default, hover, pressed, focused, disabled | `OxSwitch::new(cx, on)`              |
-| **OxSlider**   | Single, Range (future)            | default, hover, pressed, focused, disabled | `OxSlider::new(cx, value, min, max)`|
+| **OxTextInput** | Single-line | default, focused               | `OxTextInput{ empty_text: "Type..." }` |
+| **OxTextArea** | Multiline   | default, focused               | `OxTextArea{ empty_text: "..." }`    |
+| **OxCheckbox** | —          | default, checked                 | `OxCheckbox{ text: "Accept" }`       |
+| **OxRadio**    | —          | default, selected                | `OxRadio{ text: "Option A" }`       |
+| **OxSwitch**   | —          | on, off                          | `OxSwitch{}`                         |
+| **OxSlider**   | —          | default                          | `OxSlider{}`                         |
 
 ---
 
 ### Display
 
-| Component   | Variants                                      | Sizes / Shapes       | States        | API Summary                          |
+| Component   | Variants                                      | Sizes / Shapes       | States        | DSL Usage                          |
 |-------------|-----------------------------------------------|----------------------|---------------|--------------------------------------|
-| **OxLabel** | Title, Subtitle, Body, Caption                | —                    | —             | `OxLabelTitle::new(cx, "Text")`      |
-| **OxBadge**  | Default, Success, Warning, Error, Info        | Small, Medium        | —             | `OxBadge::new(cx, "Label", BadgeVariant::Success)` |
-| **OxAvatar** | Image, Initials, Icon                         | Small (24), Medium (32), Large (48) | — | `OxAvatar::new(cx).src(url)` or `.initials("AB")` |
-| **OxIcon**   | —                                            | Small, Medium, Large | default, muted | `OxIcon::new(cx, icon_id)`           |
-
-**OxLabel variants:** `OxLabelTitle`, `OxLabelSubtitle`, `OxLabelBody`, `OxLabelCaption`
-
-**OxAvatar shapes:** Circle (default), Square, Rounded
+| **OxLabel** | Title, Subtitle, Body, Caption, Secondary, Link | —                  | —             | `OxLabelTitle{ text: "Hello" }`      |
+| **OxBadge**  | Default, Success, Warning, Error, Info        | —                    | —             | `OxBadgeSuccess{}`                   |
+| **OxAvatar** | Default, Small, Large, XLarge                 | 24-64px              | —             | `OxAvatar{}`                         |
+| **OxIcon**   | Check, Close, Search, etc.                    | Small, Medium, Large | —             | `OxIcon{}`                           |
 
 ---
 
@@ -474,39 +395,45 @@ impl ThemeEngine {
 ### Prelude Imports
 
 ```rust
-use oxide_widgets::prelude::*;
-// Re-exports: OxButton, OxLabelTitle, OxLabelBody, OxBadge, OxAvatar, OxIcon,
-//             OxTextInput, OxCheckbox, OxRadio, OxSwitch, OxSlider,
-//             ThemeEngine, use_theme
+use oxide_core::prelude::*;
+// Re-exports: ThemeEngine, ThemeChangedAction, Theme, SemanticColors,
+//             all token scale types, hex_to_vec4, makepad_widgets::*
 ```
 
 ### Theme Access Patterns
 
 ```rust
-// Global theme (from AppState or Scope)
-let theme = cx.use_theme();
-let bg = theme.semantic_colors.background.primary;
+use oxide_core::prelude::*;
 
-// Per-component override (future)
-OxButton::new(cx, "Click")
-    .theme_override(|t| t.accent.primary = custom_color);
+// Initialize themes at startup
+ThemeEngine::init(all_themes());
+
+// Get the current theme
+let theme = ThemeEngine::current();
+let bg = theme.colors.surface_primary;
+
+// Switch and notify widgets
+ThemeEngine::switch_by_name_and_signal(cx, "shadcn Dark");
 ```
 
-### Component DSL Patterns
+### Component DSL Usage
+
+Components are used in `script_mod!` markup:
 
 ```rust
-// Makepad live_design! style
-OxButton::new(cx, "Submit")
-    .variant(ButtonVariant::Primary)
-    .size(ButtonSize::Medium)
-    .disabled(false);
+script_mod! {
+    use mod.prelude.widgets.*
+    use mod.widgets.*
 
-OxLabelTitle::new(cx, "Welcome")
-    .align(Align::Center);
-
-OxTextInput::new(cx)
-    .placeholder("Enter email")
-    .label("Email");
+    // ...
+    OxButton{ text: "Submit" }
+    OxButtonSecondary{ text: "Cancel" }
+    OxLabelTitle{ text: "Welcome" }
+    OxTextInput{ empty_text: "Enter email..." }
+    OxCard{
+        OxLabelBody{ text: "Card content" }
+    }
+}
 ```
 
 ---

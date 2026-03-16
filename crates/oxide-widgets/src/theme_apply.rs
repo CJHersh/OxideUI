@@ -196,4 +196,135 @@ mod tests {
         assert!(map.contains(live_id!(c)));
         assert!(!map.contains(live_id!(d)));
     }
+
+    #[test]
+    fn theme_map_empty_by_default() {
+        let ui = WidgetRef::default();
+        let map = ThemeMap::builder(&ui).build();
+        assert!(map.is_empty());
+        assert_eq!(map.len(), 0);
+    }
+
+    #[test]
+    fn theme_map_can_register_all_apply_functions() {
+        use crate::buttons;
+        use crate::data;
+        use crate::display;
+        use crate::feedback;
+        use crate::inputs;
+        use crate::layout;
+        use crate::navigation;
+        use crate::overlay;
+
+        let ui = WidgetRef::default();
+        let map = ThemeMap::builder(&ui)
+            .add(live_id!(btn), buttons::apply_button_theme)
+            .add(live_id!(btn_sec), buttons::apply_button_secondary_theme)
+            .add(live_id!(btn_ghost), buttons::apply_button_ghost_theme)
+            .add(live_id!(btn_danger), buttons::apply_button_danger_theme)
+            .add(live_id!(btn_outline), buttons::apply_button_outline_theme)
+            .add(live_id!(btn_sm), buttons::apply_button_small_theme)
+            .add(live_id!(btn_lg), buttons::apply_button_large_theme)
+            .add(live_id!(icon_btn), buttons::apply_icon_button_theme)
+            .add(live_id!(toggle_btn), buttons::apply_toggle_button_theme)
+            .add(live_id!(label), display::apply_label_theme)
+            .add(live_id!(label_title), display::apply_label_title_theme)
+            .add(live_id!(label_sub), display::apply_label_subtitle_theme)
+            .add(live_id!(label_body), display::apply_label_body_theme)
+            .add(live_id!(label_cap), display::apply_label_caption_theme)
+            .add(live_id!(label_sec), display::apply_label_secondary_theme)
+            .add(live_id!(label_link), display::apply_label_link_theme)
+            .add(live_id!(badge), display::apply_badge_theme)
+            .add(live_id!(badge_s), display::apply_badge_success_theme)
+            .add(live_id!(badge_w), display::apply_badge_warning_theme)
+            .add(live_id!(badge_e), display::apply_badge_error_theme)
+            .add(live_id!(badge_i), display::apply_badge_info_theme)
+            .add(live_id!(avatar), display::apply_avatar_theme)
+            .add(live_id!(icon), display::apply_icon_theme)
+            .add(live_id!(icon_a), display::apply_icon_accent_theme)
+            .add(live_id!(icon_s), display::apply_icon_secondary_theme)
+            .add(live_id!(text_in), inputs::apply_text_input_theme)
+            .add(live_id!(text_area), inputs::apply_text_area_theme)
+            .add(live_id!(checkbox), inputs::apply_checkbox_theme)
+            .add(live_id!(radio), inputs::apply_radio_theme)
+            .add(live_id!(switch), inputs::apply_switch_theme)
+            .add(live_id!(slider), inputs::apply_slider_theme)
+            .add(live_id!(card), layout::apply_card_theme)
+            .add(live_id!(divider), layout::apply_divider_theme)
+            .add(live_id!(progress), feedback::apply_progress_theme)
+            .add(live_id!(alert), feedback::apply_alert_theme)
+            .add(live_id!(alert_s), feedback::apply_alert_success_theme)
+            .add(live_id!(alert_w), feedback::apply_alert_warning_theme)
+            .add(live_id!(alert_e), feedback::apply_alert_error_theme)
+            .add(live_id!(skel), feedback::apply_skeleton_theme)
+            .add(live_id!(skel_c), feedback::apply_skeleton_circle_theme)
+            .add(live_id!(skel_t), feedback::apply_skeleton_text_theme)
+            .add(live_id!(tab), navigation::apply_tab_theme)
+            .add(live_id!(tooltip), overlay::apply_tooltip_theme)
+            .add(live_id!(popover), overlay::apply_popover_theme)
+            .add(live_id!(drawer), overlay::apply_drawer_theme)
+            .add(live_id!(menu), overlay::apply_menu_theme)
+            .add(live_id!(menu_item), overlay::apply_menu_item_theme)
+            .add(live_id!(list_item), data::apply_list_item_theme)
+            .add(live_id!(table_hdr), data::apply_table_header_theme)
+            .build();
+
+        assert_eq!(map.len(), 49);
+    }
+
+    #[test]
+    fn all_apply_functions_are_valid_fn_pointers() {
+        let fns: Vec<ApplyFn> = vec![
+            crate::buttons::apply_button_theme,
+            crate::buttons::apply_button_secondary_theme,
+            crate::buttons::apply_button_ghost_theme,
+            crate::buttons::apply_button_danger_theme,
+            crate::buttons::apply_button_outline_theme,
+            crate::buttons::apply_button_small_theme,
+            crate::buttons::apply_button_large_theme,
+            crate::buttons::apply_icon_button_theme,
+            crate::buttons::apply_toggle_button_theme,
+            crate::display::apply_label_theme,
+            crate::display::apply_label_title_theme,
+            crate::display::apply_label_subtitle_theme,
+            crate::display::apply_label_body_theme,
+            crate::display::apply_label_caption_theme,
+            crate::display::apply_label_secondary_theme,
+            crate::display::apply_label_link_theme,
+            crate::display::apply_badge_theme,
+            crate::display::apply_badge_success_theme,
+            crate::display::apply_badge_warning_theme,
+            crate::display::apply_badge_error_theme,
+            crate::display::apply_badge_info_theme,
+            crate::display::apply_avatar_theme,
+            crate::display::apply_icon_theme,
+            crate::display::apply_icon_accent_theme,
+            crate::display::apply_icon_secondary_theme,
+            crate::inputs::apply_text_input_theme,
+            crate::inputs::apply_text_area_theme,
+            crate::inputs::apply_checkbox_theme,
+            crate::inputs::apply_radio_theme,
+            crate::inputs::apply_switch_theme,
+            crate::inputs::apply_slider_theme,
+            crate::layout::apply_card_theme,
+            crate::layout::apply_divider_theme,
+            crate::feedback::apply_progress_theme,
+            crate::feedback::apply_alert_theme,
+            crate::feedback::apply_alert_success_theme,
+            crate::feedback::apply_alert_warning_theme,
+            crate::feedback::apply_alert_error_theme,
+            crate::feedback::apply_skeleton_theme,
+            crate::feedback::apply_skeleton_circle_theme,
+            crate::feedback::apply_skeleton_text_theme,
+            crate::navigation::apply_tab_theme,
+            crate::overlay::apply_tooltip_theme,
+            crate::overlay::apply_popover_theme,
+            crate::overlay::apply_drawer_theme,
+            crate::overlay::apply_menu_theme,
+            crate::overlay::apply_menu_item_theme,
+            crate::data::apply_list_item_theme,
+            crate::data::apply_table_header_theme,
+        ];
+        assert_eq!(fns.len(), 49, "Expected 49 apply_*_theme functions");
+    }
 }

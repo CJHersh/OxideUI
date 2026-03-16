@@ -12,10 +12,10 @@ script_mod! {
         padding: Inset{top: 8., right: 8., bottom: 8., left: 8.}
         align: Center
         draw_bg +: {
-            color: uniform(#FFFFFF00)
-            color_hover: uniform(#0000000D)
-            color_down: uniform(#00000014)
-            border_radius: uniform(6.0)
+            color: #FFFFFF00
+            color_hover: #0000000D
+            color_down: #00000014
+            border_radius: 6.0
         }
     }
 }

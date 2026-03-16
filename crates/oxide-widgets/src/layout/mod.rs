@@ -1,3 +1,8 @@
+/// Layout widgets for OxideUI.
+///
+/// OxCard and OxDivider are fully functional. OxStack and OxGrid are layout placeholders
+/// (**Status: Planned**) -- OxStack is a simple vertical flow and OxGrid is a horizontal
+/// flow. Future versions will add responsive column counts, gap control, and wrap behavior.
 use makepad_widgets::*;
 use oxide_core::theme::Theme;
 
@@ -12,32 +17,17 @@ script_mod! {
         padding: 24.
         flow: Down spacing: 16.
         draw_bg +: {
-            color: uniform(#FFFFFF)
-            border_radius: uniform(8.0)
-            border_size: uniform(1.0)
-            border_color: uniform(#E5E5E5)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let r = self.border_radius;
-                let bs = self.border_size;
-                let sz = self.rect_size;
-
-                sdf.box(bs, bs, sz.x - bs * 2.0, sz.y - bs * 2.0, max(0.0, r - bs));
-                sdf.fill(self.color);
-
-                sdf.box(bs * 0.5, bs * 0.5, sz.x - bs, sz.y - bs, r);
-                sdf.stroke(self.border_color, bs);
-
-                return sdf.result;
-            }
+            color: #FFFFFF
+            border_radius: 8.0
+            border_size: 1.0
+            border_color: #E5E5E5
         }
     }
 
     mod.widgets.OxDivider = mod.widgets.SolidView{
         width: Fill height: 1.
         draw_bg +: {
-            color: uniform(#E5E5E5)
+            color: #E5E5E5
         }
     }
 

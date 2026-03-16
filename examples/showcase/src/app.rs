@@ -8,9 +8,6 @@ script_mod! {
 
     let app = startup() do #(App::script_component(vm)){
         ui: Root{
-            font_family: FontFamily{
-                latin := FontMember{res: crate_resource("self:resources/Inter-Regular.ttf") asc: -0.1 desc: 0.0}
-            }
             main_window := Window{
                 window.title: "OxideUI Showcase"
                 window.inner_size: vec2(1200, 800)
@@ -18,121 +15,69 @@ script_mod! {
                     View{
                         width: Fill height: Fill
                         flow: Right
+                        show_bg: true
+                        draw_bg.color: #FFFFFFFF
 
                         View{
                             width: 260 height: Fill
                             flow: Down
-                            padding: Inset{top: 32. right: 16. bottom: 16. left: 16.}
+                            padding: Inset{top: 24. right: 16. bottom: 16. left: 16.}
                             spacing: 0
                             show_bg: true
-                            draw_bg.color: #FAFAFAFF
+                            draw_bg.color: #FFFFFFFF
 
                             View{
                                 width: Fill height: Fit
-                                flow: Down spacing: 2
+                                flow: Down spacing: 4
                                 padding.bottom: 24
-                                Label{
-                                    draw_text +: {
-                                        color: uniform(#0A0A0A)
-                                        text_style +: { font_size: 22. }
-                                    }
-                                    text: "OxideUI"
-                                }
-                                Label{
-                                    draw_text +: {
-                                        color: uniform(#A3A3A3)
-                                        text_style +: { font_size: 11. }
-                                    }
-                                    text: "Component Library"
-                                }
+                                OxLabelTitle{ text: "OxideUI" }
+                                OxLabelCaption{ text: "Component Library" }
                             }
 
                             OxDivider{}
 
                             View{
                                 width: Fill height: Fit
-                                padding: Inset{top: 20. right: 0. bottom: 12. left: 4.}
-                                Label{
-                                    draw_text +: {
-                                        color: uniform(#A3A3A3)
-                                        text_style +: { font_size: 10. }
-                                    }
-                                    text: "COMPONENTS"
-                                }
+                                padding: Inset{top: 20. right: 0. bottom: 8. left: 4.}
+                                OxLabelSecondary{ text: "COMPONENTS" }
                             }
 
                             View{
                                 width: Fill height: Fit
-                                flow: Down spacing: 2
+                                flow: Down spacing: 4
 
                                 View{
                                     width: Fill height: Fit flow: Overlay
-                                    nav_on_buttons := ButtonFlat{
-                                        width: Fill text: "Buttons"
-                                        draw_bg +: { color: uniform(#F5F5F5) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#0A0A0A) text_style +: { font_size: 13. } }
-                                    }
-                                    nav_off_buttons := ButtonFlat{
-                                        width: Fill text: "Buttons" visible: false
-                                        draw_bg +: { color: uniform(#FAFAFA) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#737373) text_style +: { font_size: 13. } }
-                                    }
+                                    nav_on_buttons := OxNavButtonActive{ text: "Buttons" }
+                                    nav_off_buttons := OxNavButtonInactive{ text: "Buttons" visible: false }
                                 }
                                 View{
                                     width: Fill height: Fit flow: Overlay
-                                    nav_on_inputs := ButtonFlat{
-                                        width: Fill text: "Inputs" visible: false
-                                        draw_bg +: { color: uniform(#F5F5F5) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#0A0A0A) text_style +: { font_size: 13. } }
-                                    }
-                                    nav_off_inputs := ButtonFlat{
-                                        width: Fill text: "Inputs"
-                                        draw_bg +: { color: uniform(#FAFAFA) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#737373) text_style +: { font_size: 13. } }
-                                    }
+                                    nav_on_inputs := OxNavButtonActive{ text: "Inputs" visible: false }
+                                    nav_off_inputs := OxNavButtonInactive{ text: "Inputs" }
                                 }
                                 View{
                                     width: Fill height: Fit flow: Overlay
-                                    nav_on_display := ButtonFlat{
-                                        width: Fill text: "Display" visible: false
-                                        draw_bg +: { color: uniform(#F5F5F5) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#0A0A0A) text_style +: { font_size: 13. } }
-                                    }
-                                    nav_off_display := ButtonFlat{
-                                        width: Fill text: "Display"
-                                        draw_bg +: { color: uniform(#FAFAFA) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#737373) text_style +: { font_size: 13. } }
-                                    }
+                                    nav_on_display := OxNavButtonActive{ text: "Display" visible: false }
+                                    nav_off_display := OxNavButtonInactive{ text: "Display" }
                                 }
                                 View{
                                     width: Fill height: Fit flow: Overlay
-                                    nav_on_feedback := ButtonFlat{
-                                        width: Fill text: "Feedback" visible: false
-                                        draw_bg +: { color: uniform(#F5F5F5) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#0A0A0A) text_style +: { font_size: 13. } }
-                                    }
-                                    nav_off_feedback := ButtonFlat{
-                                        width: Fill text: "Feedback"
-                                        draw_bg +: { color: uniform(#FAFAFA) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#737373) text_style +: { font_size: 13. } }
-                                    }
+                                    nav_on_feedback := OxNavButtonActive{ text: "Feedback" visible: false }
+                                    nav_off_feedback := OxNavButtonInactive{ text: "Feedback" }
                                 }
                                 View{
                                     width: Fill height: Fit flow: Overlay
-                                    nav_on_layout := ButtonFlat{
-                                        width: Fill text: "Layout" visible: false
-                                        draw_bg +: { color: uniform(#F5F5F5) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#0A0A0A) text_style +: { font_size: 13. } }
-                                    }
-                                    nav_off_layout := ButtonFlat{
-                                        width: Fill text: "Layout"
-                                        draw_bg +: { color: uniform(#FAFAFA) border_radius: uniform(6.0) }
-                                        draw_text +: { color: uniform(#737373) text_style +: { font_size: 13. } }
-                                    }
+                                    nav_on_layout := OxNavButtonActive{ text: "Layout" visible: false }
+                                    nav_off_layout := OxNavButtonInactive{ text: "Layout" }
                                 }
                             }
 
-                            View{ width: Fill height: Fill }
+                            View{
+                                width: Fill height: Fill
+                                show_bg: true
+                                draw_bg.color: #FFFFFFFF
+                            }
 
                             OxDivider{}
 
@@ -140,20 +85,14 @@ script_mod! {
                                 width: Fill height: Fit
                                 flow: Down spacing: 6
                                 padding: Inset{top: 12. right: 4. bottom: 4. left: 4.}
-                                Label{
-                                    draw_text +: { color: uniform(#A3A3A3) text_style +: { font_size: 10. } }
-                                    text: "v0.1.0"
-                                }
-                                Label{
-                                    draw_text +: { color: uniform(#A3A3A3) text_style +: { font_size: 10. } }
-                                    text: "Built with Makepad"
-                                }
+                                OxLabelCaption{ text: "v0.1.0" }
+                                OxLabelCaption{ text: "Built with Makepad" }
                             }
                         }
 
                         SolidView{
                             width: 1 height: Fill
-                            draw_bg +: { color: uniform(#E5E5E5) }
+                            draw_bg +: { color: #E5E5E5 }
                         }
 
                         View{
@@ -272,27 +211,27 @@ script_mod! {
 
                                     OxCard{
                                         OxLabelSubtitle{ text: "Icons" }
-                                        OxLabelCaption{ text: "SDF-rendered vector icons that scale perfectly at any size." }
+                                        OxLabelCaption{ text: "SVG icons rendered via Makepad's DrawSvg system." }
                                         View{
                                             width: Fill height: Fit
                                             flow: Right spacing: 12 align.y: 0.5
-                                            OxIcon{ draw_bg.icon_type: 0.0 }
-                                            OxIcon{ draw_bg.icon_type: 1.0 }
-                                            OxIcon{ draw_bg.icon_type: 2.0 }
-                                            OxIcon{ draw_bg.icon_type: 4.0 }
-                                            OxIcon{ draw_bg.icon_type: 6.0 }
-                                            OxIcon{ draw_bg.icon_type: 7.0 }
-                                            OxIcon{ draw_bg.icon_type: 8.0 }
-                                            OxIcon{ draw_bg.icon_type: 9.0 }
-                                            OxIcon{ draw_bg.icon_type: 10.0 }
-                                            OxIcon{ draw_bg.icon_type: 11.0 }
-                                            OxIcon{ draw_bg.icon_type: 12.0 }
-                                            OxIcon{ draw_bg.icon_type: 14.0 }
-                                            OxIcon{ draw_bg.icon_type: 15.0 }
-                                            OxIcon{ draw_bg.icon_type: 16.0 }
-                                            OxIcon{ draw_bg.icon_type: 17.0 }
-                                            OxIcon{ draw_bg.icon_type: 18.0 }
-                                            OxIcon{ draw_bg.icon_type: 19.0 }
+                                            OxIconCheck{}
+                                            OxIconClose{}
+                                            OxIconChevronRight{}
+                                            OxIconChevronDown{}
+                                            OxIconPlus{}
+                                            OxIconMinus{}
+                                            OxIconSearch{}
+                                            OxIconMenu{}
+                                            OxIconAlertCircle{}
+                                            OxIconInfo{}
+                                            OxIconArrowRight{}
+                                            OxIconEye{}
+                                            OxIconCopy{}
+                                            OxIconSettings{}
+                                            OxIconStar{}
+                                            OxIconHeart{}
+                                            OxIconExternalLink{}
                                         }
                                     }
                                 }
@@ -344,7 +283,7 @@ script_mod! {
                                         OxLabelSubtitle{ text: "Cards & Layout" }
                                         OxLabelCaption{ text: "Container components for structuring content." }
                                         OxCard{
-                                            draw_bg +: { color: uniform(#FAFAFA) }
+                                            draw_bg +: { color: #FAFAFA }
                                             OxLabelBody{ text: "Nested card with different surface color" }
                                             OxLabelCaption{ text: "Cards can be nested and themed independently." }
                                         }
@@ -353,17 +292,17 @@ script_mod! {
                                         OxGrid{
                                             OxCard{
                                                 width: Fill
-                                                draw_bg +: { color: uniform(#FAFAFA) }
+                                                draw_bg +: { color: #FAFAFA }
                                                 OxLabelBody{ text: "Column 1" }
                                             }
                                             OxCard{
                                                 width: Fill
-                                                draw_bg +: { color: uniform(#FAFAFA) }
+                                                draw_bg +: { color: #FAFAFA }
                                                 OxLabelBody{ text: "Column 2" }
                                             }
                                             OxCard{
                                                 width: Fill
-                                                draw_bg +: { color: uniform(#FAFAFA) }
+                                                draw_bg +: { color: #FAFAFA }
                                                 OxLabelBody{ text: "Column 3" }
                                             }
                                         }

@@ -1,3 +1,9 @@
+/// Overlay widgets for OxideUI.
+///
+/// **Status: Planned** -- OxTooltip, OxPopover, OxDrawer, and OxMenu are visual shells
+/// with `visible: false` defaults but no show/hide logic, positioning, or animation.
+/// OxMenuItem is a functional styled container. Full overlay behavior (trigger-based
+/// visibility, backdrop, slide animations) will be added in a future release.
 use makepad_widgets::*;
 use oxide_core::theme::Theme;
 
@@ -12,12 +18,12 @@ script_mod! {
         visible: false
         padding: Inset{left: 8., right: 8., top: 6., bottom: 6.}
         draw_bg +: {
-            color: uniform(#171717)
-            border_radius: uniform(4.0)
+            color: #171717
+            border_radius: 4.0
         }
         label := Label{
             draw_text +: {
-                color: uniform(#FAFAFA)
+                color: #FAFAFA
                 text_style +: { font_size: 12. }
             }
             text: "Tooltip"
@@ -30,8 +36,8 @@ script_mod! {
         padding: 12.
         flow: Down
         draw_bg +: {
-            color: uniform(#FFFFFF)
-            border_radius: uniform(6.0)
+            color: #FFFFFF
+            border_radius: 6.0
         }
     }
 
@@ -40,7 +46,7 @@ script_mod! {
         visible: false
         flow: Down padding: 16.
         draw_bg +: {
-            color: uniform(#FFFFFF)
+            color: #FFFFFF
         }
     }
 
@@ -48,22 +54,21 @@ script_mod! {
         width: 200. height: Fit
         flow: Down padding: 4.
         draw_bg +: {
-            color: uniform(#FFFFFF)
-            border_radius: uniform(6.0)
+            color: #FFFFFF
+            border_radius: 6.0
         }
     }
 
     mod.widgets.OxMenuItem = mod.widgets.RoundedView{
         width: Fill height: Fit
         padding: Inset{left: 12., right: 12., top: 8., bottom: 8.}
-        cursor: Hand
-        draw_bg +: {
-            color: uniform(#FFFFFF00)
-            border_radius: uniform(4.0)
+draw_bg +: {
+            color: #FFFFFF00
+            border_radius: 4.0
         }
         label := Label{
             draw_text +: {
-                color: uniform(#0A0A0A)
+                color: #0A0A0A
                 text_style +: { font_size: 14. }
             }
             text: "Menu Item"

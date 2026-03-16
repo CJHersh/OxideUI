@@ -10,10 +10,7 @@ script_mod! {
     mod.widgets.OxSlider = mod.widgets.Slider{
         width: Fill height: 40.
         draw_bg +: {
-            color: uniform(#E5E5E5)
-        }
-        draw_slider +: {
-            color: uniform(#171717)
+            color: #E5E5E5
         }
     }
 }

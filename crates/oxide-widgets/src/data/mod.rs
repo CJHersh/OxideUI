@@ -1,3 +1,9 @@
+/// Data display widgets for OxideUI.
+///
+/// **Status: Planned** -- OxTable, OxTableRow, OxList, and OxTimeline are layout
+/// placeholders with no data binding, sorting, or virtualization. OxTableHeader and
+/// OxListItem are functional styled containers. Full data display behavior will be
+/// added in a future release.
 use makepad_widgets::*;
 use oxide_core::theme::Theme;
 
@@ -24,7 +30,7 @@ script_mod! {
         padding: Inset{left: 12., right: 12., top: 10., bottom: 10.}
         show_bg: true
         draw_bg +: {
-            color: uniform(#F5F5F5)
+            color: #F5F5F5
         }
     }
 
@@ -37,13 +43,12 @@ script_mod! {
         width: Fill height: Fit
         padding: Inset{left: 16., right: 16., top: 12., bottom: 12.}
         show_bg: true
-        cursor: Hand
-        draw_bg +: {
-            color: uniform(#FFFFFF00)
+draw_bg +: {
+            color: #FFFFFF00
         }
         label := Label{
             draw_text +: {
-                color: uniform(#0A0A0A)
+                color: #0A0A0A
                 text_style +: { font_size: 14. }
             }
             text: "List item"
