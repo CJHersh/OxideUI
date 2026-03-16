@@ -15,7 +15,7 @@ pub fn script_mod(vm: &mut ScriptVm) {
 pub use button::{
     apply_button_danger_theme, apply_button_ghost_theme, apply_button_large_theme,
     apply_button_outline_theme, apply_button_secondary_theme, apply_button_small_theme,
-    apply_button_theme,
+    apply_button_theme, set_nav_button_active, set_nav_button_inactive,
 };
 pub use icon_button::apply_icon_button_theme;
 pub use toggle_button::apply_toggle_button_theme;

@@ -16,7 +16,7 @@ script_mod! {
         width: Fill height: Fit
         empty_text: "Type here..."
         draw_bg +: {
-            border_radius: 6.0
+            border_radius: 2.0
             border_size: 1.0
             border_color: #E5E5E5
             border_color_focus: #D4D4D4

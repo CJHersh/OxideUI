@@ -164,41 +164,81 @@ script_mod! {
         draw_bg +: { border_radius: 6.0 }
     }
 
-    mod.widgets.OxNavButtonActive = mod.widgets.Button{
+    mod.widgets.OxNavButton = mod.widgets.Button{
         width: Fill height: Fit
         padding: Inset{top: 8., right: 12., bottom: 8., left: 12.}
         draw_bg +: {
-            color: #EAEAEA
-            color_hover: #E0E0E0
-            color_down: #D6D6D6
-            color_focus: #EAEAEA
-            border_radius: 6.0
-        }
-        draw_text +: {
-            color: #0A0A0A
-            color_hover: #0A0A0A
-            color_down: #0A0A0A
-            color_focus: #0A0A0A
-            text_style +: { font_size: 13. }
-        }
-    }
-
-    mod.widgets.OxNavButtonInactive = mod.widgets.Button{
-        width: Fill height: Fit
-        padding: Inset{top: 8., right: 12., bottom: 8., left: 12.}
-        draw_bg +: {
+            selected: instance(0.0)
             color: #FFFFFF00
-            color_hover: #F0F0F0
-            color_down: #EBEBEB
+            color_hover: #FFFFFF1A
+            color_down: #FFFFFF26
             color_focus: #FFFFFF00
+            color_selected: uniform(#FFFFFF)
+            color_selected_hover: uniform(#F5F5F5)
+            color_selected_down: uniform(#EBEBEB)
             border_radius: 6.0
+
+            pixel: fn() {
+                let sdf = Sdf2d.viewport(self.pos * self.rect_size)
+
+                sdf.box(
+                    self.border_size
+                    self.border_size
+                    self.rect_size.x - self.border_size * 2.
+                    self.rect_size.y - self.border_size * 2.
+                    self.border_radius
+                )
+
+                let normal = self.color
+                    .mix(self.color_focus, self.focus)
+                    .mix(self.color_hover, self.hover)
+                    .mix(self.color_down, self.down)
+
+                let sel = self.color_selected
+                    .mix(self.color_selected_hover, self.hover)
+                    .mix(self.color_selected_down, self.down)
+
+                let fill = normal.mix(sel, self.selected)
+                sdf.fill(fill)
+                return sdf.result
+            }
         }
         draw_text +: {
-            color: #737373
-            color_hover: #525252
-            color_down: #404040
-            color_focus: #737373
+            selected: instance(0.0)
+            color: #FAFAFA
+            color_hover: #FFFFFF
+            color_down: #FFFFFF
+            color_focus: #FAFAFA
+            color_selected: uniform(#171717)
             text_style +: { font_size: 13. }
+
+            get_color: fn() {
+                let base = self.color
+                    .mix(self.color_focus, self.focus)
+                    .mix(self.color_hover, self.hover)
+                    .mix(self.color_down, self.down)
+                    .mix(self.color_disabled, self.disabled)
+                return base.mix(self.color_selected, self.selected)
+            }
+        }
+        animator +: {
+            selected: {
+                default: @off
+                off: AnimatorState{
+                    from: {all: Forward {duration: 0.0}}
+                    apply: {
+                        draw_bg: {selected: 0.0}
+                        draw_text: {selected: 0.0}
+                    }
+                }
+                on: AnimatorState{
+                    from: {all: Forward {duration: 0.0}}
+                    apply: {
+                        draw_bg: {selected: snap(1.0)}
+                        draw_text: {selected: snap(1.0)}
+                    }
+                }
+            }
         }
     }
 }
@@ -323,4 +363,22 @@ pub fn apply_button_small_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) 
 
 pub fn apply_button_large_theme(cx: &mut Cx, widget: &WidgetRef, theme: &Theme) {
     apply_button_theme(cx, widget, theme);
+}
+
+/// Switch an `OxNavButton` to its active (highlighted) appearance:
+/// white background with dark text, driven by the `selected` animator.
+pub fn set_nav_button_active(cx: &mut Cx, widget: &WidgetRef) {
+    if let Some(mut button) = widget.borrow_mut::<Button>() {
+        button.animator_cut(cx, ids!(selected.on));
+    }
+    widget.redraw(cx);
+}
+
+/// Switch an `OxNavButton` back to its inactive (transparent) appearance:
+/// transparent background with white text, driven by the `selected` animator.
+pub fn set_nav_button_inactive(cx: &mut Cx, widget: &WidgetRef) {
+    if let Some(mut button) = widget.borrow_mut::<Button>() {
+        button.animator_cut(cx, ids!(selected.off));
+    }
+    widget.redraw(cx);
 }

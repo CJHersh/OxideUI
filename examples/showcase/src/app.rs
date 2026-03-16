@@ -46,31 +46,11 @@ script_mod! {
                                 width: Fill height: Fit
                                 flow: Down spacing: 4
 
-                                View{
-                                    width: Fill height: Fit flow: Overlay
-                                    nav_on_buttons := OxNavButtonActive{ text: "Buttons" }
-                                    nav_off_buttons := OxNavButtonInactive{ text: "Buttons" visible: false }
-                                }
-                                View{
-                                    width: Fill height: Fit flow: Overlay
-                                    nav_on_inputs := OxNavButtonActive{ text: "Inputs" visible: false }
-                                    nav_off_inputs := OxNavButtonInactive{ text: "Inputs" }
-                                }
-                                View{
-                                    width: Fill height: Fit flow: Overlay
-                                    nav_on_display := OxNavButtonActive{ text: "Display" visible: false }
-                                    nav_off_display := OxNavButtonInactive{ text: "Display" }
-                                }
-                                View{
-                                    width: Fill height: Fit flow: Overlay
-                                    nav_on_feedback := OxNavButtonActive{ text: "Feedback" visible: false }
-                                    nav_off_feedback := OxNavButtonInactive{ text: "Feedback" }
-                                }
-                                View{
-                                    width: Fill height: Fit flow: Overlay
-                                    nav_on_layout := OxNavButtonActive{ text: "Layout" visible: false }
-                                    nav_off_layout := OxNavButtonInactive{ text: "Layout" }
-                                }
+                                nav_buttons := OxNavButton{ text: "Buttons" }
+                                nav_inputs := OxNavButton{ text: "Inputs" }
+                                nav_display := OxNavButton{ text: "Display" }
+                                nav_feedback := OxNavButton{ text: "Feedback" }
+                                nav_layout := OxNavButton{ text: "Layout" }
                             }
 
                             View{
@@ -328,36 +308,20 @@ impl App {
     fn set_active_nav(&self, cx: &mut Cx, section: &str) {
         for s in ["buttons", "inputs", "display", "feedback", "layout"] {
             let is_active = s == section;
-            let (on, off, sec) = match s {
-                "buttons" => (
-                    ids!(nav_on_buttons),
-                    ids!(nav_off_buttons),
-                    ids!(section_buttons),
-                ),
-                "inputs" => (
-                    ids!(nav_on_inputs),
-                    ids!(nav_off_inputs),
-                    ids!(section_inputs),
-                ),
-                "display" => (
-                    ids!(nav_on_display),
-                    ids!(nav_off_display),
-                    ids!(section_display),
-                ),
-                "feedback" => (
-                    ids!(nav_on_feedback),
-                    ids!(nav_off_feedback),
-                    ids!(section_feedback),
-                ),
-                "layout" => (
-                    ids!(nav_on_layout),
-                    ids!(nav_off_layout),
-                    ids!(section_layout),
-                ),
+            let (nav, sec) = match s {
+                "buttons" => (ids!(nav_buttons), ids!(section_buttons)),
+                "inputs" => (ids!(nav_inputs), ids!(section_inputs)),
+                "display" => (ids!(nav_display), ids!(section_display)),
+                "feedback" => (ids!(nav_feedback), ids!(section_feedback)),
+                "layout" => (ids!(nav_layout), ids!(section_layout)),
                 _ => continue,
             };
-            self.ui.button(cx, on).set_visible(cx, is_active);
-            self.ui.button(cx, off).set_visible(cx, !is_active);
+            let btn = self.ui.button(cx, nav);
+            if is_active {
+                oxide_widgets::buttons::set_nav_button_active(cx, &btn);
+            } else {
+                oxide_widgets::buttons::set_nav_button_inactive(cx, &btn);
+            }
             self.ui.view(cx, sec).set_visible(cx, is_active);
         }
         self.ui.redraw(cx);
@@ -371,32 +335,24 @@ pub struct App {
 }
 
 impl MatchEvent for App {
-    fn handle_startup(&mut self, _cx: &mut Cx) {}
+    fn handle_startup(&mut self, cx: &mut Cx) {
+        self.set_active_nav(cx, "buttons");
+    }
 
     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions) {
-        if self.ui.button(cx, ids!(nav_on_buttons)).clicked(actions)
-            || self.ui.button(cx, ids!(nav_off_buttons)).clicked(actions)
-        {
+        if self.ui.button(cx, ids!(nav_buttons)).clicked(actions) {
             self.set_active_nav(cx, "buttons");
         }
-        if self.ui.button(cx, ids!(nav_on_inputs)).clicked(actions)
-            || self.ui.button(cx, ids!(nav_off_inputs)).clicked(actions)
-        {
+        if self.ui.button(cx, ids!(nav_inputs)).clicked(actions) {
             self.set_active_nav(cx, "inputs");
         }
-        if self.ui.button(cx, ids!(nav_on_display)).clicked(actions)
-            || self.ui.button(cx, ids!(nav_off_display)).clicked(actions)
-        {
+        if self.ui.button(cx, ids!(nav_display)).clicked(actions) {
             self.set_active_nav(cx, "display");
         }
-        if self.ui.button(cx, ids!(nav_on_feedback)).clicked(actions)
-            || self.ui.button(cx, ids!(nav_off_feedback)).clicked(actions)
-        {
+        if self.ui.button(cx, ids!(nav_feedback)).clicked(actions) {
             self.set_active_nav(cx, "feedback");
         }
-        if self.ui.button(cx, ids!(nav_on_layout)).clicked(actions)
-            || self.ui.button(cx, ids!(nav_off_layout)).clicked(actions)
-        {
+        if self.ui.button(cx, ids!(nav_layout)).clicked(actions) {
             self.set_active_nav(cx, "layout");
         }
     }
